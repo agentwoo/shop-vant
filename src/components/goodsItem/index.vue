@@ -2,7 +2,7 @@
 <script lang='ts' setup>
 import { reactive, toRefs, ref, watch } from 'vue'
 import router from '@/router';
-// import { useGoodsItemStore } from '@/store/index'
+import { useGoodsItemStore } from '@/store/index'
 import { IgoodsDesc } from '@/utils/store'
 
 type Props = {
@@ -10,12 +10,19 @@ type Props = {
 }
 defineProps<Props>()
 
-// const goodsItemStore = useGoodsItemStore()
+const goodsItemStore = useGoodsItemStore()
 const toGoodsDesc = (goodsId: string) => {
     router.push({
         name: 'goodsDesc',
         params: { id: goodsId }
     })
+
+    // 点击时views数量加一，还需调用后台接口
+    let index = goodsItemStore.goodsItem.findIndex(v => v.goods_id === goodsId)
+    let item = goodsItemStore.goodsItem.find(v => v.goods_id === goodsId)
+    if (!item) return
+    let views = Number(item.views) + 1
+    goodsItemStore.goodsItem.splice(index, 1, { ...item, views: String(views) })
 }
 </script>
 

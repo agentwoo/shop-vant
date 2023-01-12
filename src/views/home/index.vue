@@ -1,26 +1,43 @@
 <!-- 首页 -->
 <script lang='ts' setup>
 import { reactive, toRefs, ref } from 'vue'
+import { showSuccessToast, showFailToast } from 'vant';
+
+import router from '@/router';
 import Category from '@/views/home/category/index.vue'
 import GoodsItem from '@/components/goodsItem/index.vue'
 import { useGoodsItemStore } from '@/store/index'
 
 
 const goodsItemStore = useGoodsItemStore()
-const value = ref('');
 const images = [
     'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',
     'https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg',
 ];
 
+// 查询待办事项
+const search = () => {
+    let res = goodsItemStore.searchItem(goodsItemStore.searchVal)
+    if (res === 0) return showFailToast('输入不能为空');
+    if (res === 1) {
+        goodsItemStore.searchRes = []
+        router.push({ path: '/search' })
+        return showFailToast('暂无该商品');
+    }
+
+    goodsItemStore.searchRes = res
+    router.push({ path: '/search' })
+    showSuccessToast('查找成功');
+    goodsItemStore.searchVal = ''
+}
+
 </script>
 
 <template>
-
     <div class="container">
         <van-nav-bar title='首页' fixed />
         <div class="container_search">
-            <van-search v-model="value" placeholder="请输入搜索关键词" />
+            <van-search v-model="goodsItemStore.searchVal" clearable placeholder="请输入搜索关键词" @search="search" />
         </div>
         <div class="container_swiper">
             <van-swipe :autoplay="3000" lazy-render style="height:200px">
@@ -32,7 +49,7 @@ const images = [
         <div class="container_recommend">推荐商品</div>
         <Category></Category>
         <div class="container_layout">
-            <GoodsItem :goodsItemDesc="goodsItemStore.goodsItem"></GoodsItem>
+            <GoodsItem :goodsItemDesc="goodsItemStore.stateOneGoodsList$"></GoodsItem>
         </div>
         <van-divider>没有更多了</van-divider>
     </div>

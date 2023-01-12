@@ -13,4 +13,5 @@ export interface IgoodsDesc {
     kind: string;
     pub_time: string;
     is_collect: string;
+    order_states: string;
 }

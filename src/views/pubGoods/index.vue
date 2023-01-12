@@ -45,16 +45,16 @@ const onFailed = (errorInfo: any) => {
             <van-form @failed="onFailed">
                 <van-cell-group inset>
                     <!-- 通过 validator 进行函数校验 -->
-                    <van-field v-model="value1" name="validator" placeholder="函数校验" label="标题"
-                        :rules="[{ required: true, message: '请填写密码' }]" />
+                    <van-field v-model="value1" name="validator" placeholder="标题" label="标题"
+                        :rules="[{ required: true, message: '请填写标题' }]" />
                     <!-- 通过 validator 返回错误提示 -->
-                    <van-field v-model="value2" name="validatorMessage" placeholder="校验函数返回错误提示" label="详情"
+                    <van-field v-model="value2" name="validatorMessage" placeholder="详情" label="详情"
                         :rules="[{ required: true, message: '请填写密码' }]" />
-                    <van-field v-model="value2" name="validatorMessage" placeholder="校验函数返回错误提示" label="原价"
+                    <van-field v-model="value2" name="validatorMessage" placeholder="原价" label="原价"
                         :rules="[{ required: true, message: '请填写密码' }]" />
-                    <van-field v-model="value2" name="validatorMessage" placeholder="校验函数返回错误提示" label="现价"
+                    <van-field v-model="value2" name="validatorMessage" placeholder="现价" label="现价"
                         :rules="[{ required: true, message: '请填写密码' }]" />
-                    <van-field v-model="value2" name="validatorMessage" placeholder="校验函数返回错误提示" label="联系方式"
+                    <van-field v-model="value2" name="validatorMessage" placeholder="联系方式" label="联系方式"
                         :rules="[{ required: true, message: '请填写密码' }]" />
                     <!-- 分类 -->
                     <van-field v-model="result" is-link readonly name="picker" label="分类" placeholder="点击选择商品分类"

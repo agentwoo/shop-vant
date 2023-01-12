@@ -32,19 +32,17 @@ const routes: Array<RouteRecordRaw> = [
             }
         ]
     },
+    // 搜索页
+    {
+        path: "/search",
+        name: "search",
+        component: () => import("@/views/home/search/index.vue"),
+    },
     // 推荐选项卡
     {
         path: "/home/allShop",
         name: "allShop",
         component: () => import("@/views/home/category/allShop/index.vue"),
-        // redirect: '/home/allShop/kind/1',
-        children: [
-            {
-                path: "kind/:kind",
-                name: "goodsKind",
-                component: () => import("@/views/home/category/allShop/components/goodsKind.vue")
-            },
-        ]
     },
     {
         path: "/home/newShop",

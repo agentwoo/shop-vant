@@ -20,12 +20,21 @@ const data = [
     },
 ]
 
+const logout = () => {
+    router.replace({ path: '/login' })
+}
+
 </script>
 
 <template>
     <div>
         <van-nav-bar title="用户中心" left-text="返回" left-arrow @click-left="onClickLeft" />
         <van-cell :title=item.title is-link :to=item.path v-for="item in data" :key="item.path" />
+        <div style="margin: 16px;">
+            <van-button round block type="primary" @click="logout()">
+                退出登录
+            </van-button>
+        </div>
     </div>
 </template>
 
