@@ -93,6 +93,8 @@ export const useGoodsItemStore = defineStore('goods', () => {
         orderGoodsList: [] as IgoodsDesc[], //订单列表
         finishedOrderGoodsList: [] as IgoodsDesc[], //已完成订单列表
 
+        pubGoodsList: [] as IgoodsDesc[],//发布商品列表
+
         searchVal: '',//搜索
         searchRes: [] as IgoodsDesc[],//搜索返回值
     })
@@ -152,25 +154,25 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
 const kindMenus = [
     {
-        title: '生活用品', kind: '1',
+        text: '生活用品', value: '1',
     },
     {
-        title: '衣服鞋帽', kind: '2',
+        text: '衣服鞋帽', value: '2',
     },
     {
-        title: '运动健身', kind: '3',
+        text: '运动健身', value: '3',
     },
     {
-        title: '电子产品', kind: '4',
+        text: '电子产品', value: '4',
     },
     {
-        title: '零食饮料', kind: '5',
+        text: '零食饮料', value: '5',
     },
     {
-        title: '学习用品', kind: '6',
+        text: '学习用品', value: '6',
     },
     {
-        title: '其它', kind: '7',
+        text: '其它', value: '7',
     },
 ]
 export const useMenusStore = defineStore('menus', () => {

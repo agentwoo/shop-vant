@@ -29,7 +29,7 @@ const handleMenulist = (index: number) => {
             <!-- 左侧菜单 -->
             <div class="container_menus_list">
                 <van-sidebar v-model="tabValue">
-                    <van-sidebar-item :title=item.title v-for="(item, index) in menusStore.menus" :key="index"
+                    <van-sidebar-item :title=item.text v-for="(item, index) in menusStore.menus" :key="index"
                         @click="handleMenulist(index)" />
                 </van-sidebar>
             </div>

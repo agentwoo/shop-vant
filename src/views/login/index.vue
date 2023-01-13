@@ -3,6 +3,8 @@
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router';
 
+
+import { loginApi } from '@/http';
 // navbar
 const router = useRouter()
 const onClickLeft = () => {
@@ -18,6 +20,31 @@ const onSubmit = (values: any) => {
     console.log('submit', values);
 };
 
+
+
+async function login() {
+    let res = await loginApi({
+        username: username.value,
+        password: password.value
+    })
+    if (res.ok) {
+        // router.push('/home')
+        // successMessage('登录成功')
+
+        // username.value = ''
+        // password.value = ''
+
+
+        console.log('登录成功');
+        console.log(res);
+
+        localStorage.setItem('token', res.token)
+
+    } else {
+        // errMessage(res.err)
+    }
+}
+
 </script>
 
 <template>
@@ -26,7 +53,7 @@ const onSubmit = (values: any) => {
         <div class="container_nav">
             <van-tabs v-model:active="activeName">
                 <van-tab title="登录" name="login">
-                    <van-form @submit="onSubmit" class="form">
+                    <van-form class="form">
                         <van-cell-group inset>
                             <van-field v-model="username" name="用户名" label="用户名" placeholder="用户名"
                                 :rules="[{ required: true, message: '请填写用户名' }]" />
@@ -34,7 +61,7 @@ const onSubmit = (values: any) => {
                                 :rules="[{ required: true, message: '请填写密码' }]" />
                         </van-cell-group>
                         <div style="margin: 16px;">
-                            <van-button round block type="primary" native-type="submit">
+                            <van-button round block type="primary" @click="login">
                                 登录
                             </van-button>
                         </div>
