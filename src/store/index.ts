@@ -2,7 +2,7 @@ import { computed, reactive, toRefs } from "vue";
 import { defineStore } from 'pinia';
 
 import imgUrl from '@/assets/pig.jpeg';
-import { IgoodsDesc } from '@/utils/store'
+import { IgoodsDesc, pubgood } from '@/utils/store'
 
 const goodsItem = [
     {
@@ -93,7 +93,7 @@ export const useGoodsItemStore = defineStore('goods', () => {
         orderGoodsList: [] as IgoodsDesc[], //订单列表
         finishedOrderGoodsList: [] as IgoodsDesc[], //已完成订单列表
 
-        pubGoodsList: [] as IgoodsDesc[],//发布商品列表
+        pubGoodsList: [] as pubgood[],//发布商品列表
 
         searchVal: '',//搜索
         searchRes: [] as IgoodsDesc[],//搜索返回值
@@ -139,6 +139,17 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
 
 
+
+    // 前后端交互
+    // 未删除和为完成的商品发布列表
+    const undelgoodsList$ = computed(() => {
+        return state.pubGoodsList.filter(v => v.is_delgoods === '0' && v.goods_status !== '4')
+    })
+    const sellgoodsList$ = computed(() => {
+        return state.pubGoodsList.filter(v => v.is_delgoods === '0' && v.goods_status === '4')
+    })
+
+
     return {
         ...toRefs(state),
         stateOneGoodsList$,
@@ -147,6 +158,10 @@ export const useGoodsItemStore = defineStore('goods', () => {
         hotGoodsList$,
         searchItem,
         goodsKind,
+
+
+        undelgoodsList$,
+        sellgoodsList$
     }
 })
 
@@ -189,16 +204,15 @@ export const useMenusStore = defineStore('menus', () => {
 
 const user = {
     user_id: '1',
-    username: 'zhangsan',
+    user_name: 'zhangsan',
     password: '123456',
     user_head_img: 'https://imgsa.baidu.com/forum/pic/item/fb530f3b5bb5c9ea472928e4d839b6003bf3b323.jpg',
     nickname: 'helloWorld',
-    is_admin: '0'
+    token: ''
 }
 export const useUserStore = defineStore('user', () => {
     const state = reactive({
-        user: user,
-        token: localStorage.getItem('gpToken')
+        user: user || {}
     })
 
     return {
