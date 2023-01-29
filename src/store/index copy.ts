@@ -1,9 +1,8 @@
-import { computed, onMounted, reactive, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
 import { defineStore } from 'pinia';
 
 import imgUrl from '@/assets/pig.jpeg';
 import { IgoodsDesc, pubgood } from '@/utils/store'
-import { Igoods, Imenus } from '@/utils/store'
 
 const goodsItem = [
     {
@@ -74,7 +73,6 @@ const goodsItem = [
 
 ]
 
-
 const arr = {
     replace: function <T>(list: T[], item: T, key: keyof T) {
         let index = list.findIndex(v => v[key] === item[key])
@@ -90,29 +88,46 @@ export const useGoodsItemStore = defineStore('goods', () => {
     const state = reactive({
         goodsItem: goodsItem,//全部商品
 
-        searchVal: '',//搜索
-        searchRes: [] as Igoods[],//搜索返回值
-        allGoodsList: [] as Igoods[],//全部商品，由服务器获取
-        newGoodsList: [] as Igoods[],
-        hotGoodsList: [] as Igoods[],
-        freeGoodsList: [] as Igoods[],
-
-
-
-
         collectGoodsList: [] as IgoodsDesc[],//收藏列表
         expCollectGoodsList: [] as IgoodsDesc[],//失效的收藏链接
         orderGoodsList: [] as IgoodsDesc[], //订单列表
         finishedOrderGoodsList: [] as IgoodsDesc[], //已完成订单列表
 
         pubGoodsList: [] as pubgood[],//发布商品列表
+
+        searchVal: '',//搜索
+        searchRes: [] as IgoodsDesc[],//搜索返回值
     })
 
+    // 订单状态为1的商品
+    const stateOneGoodsList$ = computed(() => {
+        return state.goodsItem.filter(v => v.order_states === '1')
+    })
+
+    // 最新商品
+    const newGoodsList$ = computed(() => {
+        return state.goodsItem.filter(v => v.order_states === '1').sort(function (x, y) {
+            return Number(y.pub_time.split('-').join('')) - Number(x.pub_time.split('-').join(''))
+        });
+    })
+    // 热门商品
+    const hotGoodsList$ = computed(() => {
+        return state.goodsItem.filter(v => v.order_states === '1').sort(function (x, y) {
+            return Number(y.views) - Number(x.views)
+        })
+
+    })
+    // 免费商品
+    const freeGoods$ = computed(() => {
+        return state.goodsItem.filter((v) => v.present_price === '0' && v.order_states === '1')
+    })
+
+
     // 查找事项
-    function searchItem(Val: string): 0 | 1 | Igoods[] {
+    function searchItem(Val: string): 0 | 1 | IgoodsDesc[] {
         let val = Val.trim()
         if (!val) return 0
-        let arr = state.allGoodsList.filter((v) => v.goods_title.indexOf(val) !== -1)
+        let arr = state.goodsItem.filter((v) => v.goods_title.indexOf(val) !== -1 && v.order_states === '1')
         if (arr.length === 0) return 1
         return arr
     }
@@ -137,6 +152,10 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
     return {
         ...toRefs(state),
+        stateOneGoodsList$,
+        newGoodsList$,
+        freeGoods$,
+        hotGoodsList$,
         searchItem,
         goodsKind,
 
@@ -175,7 +194,6 @@ const kindMenus = [
 export const useMenusStore = defineStore('menus', () => {
     const state = reactive({
         menus: kindMenus,
-        menus1: [] as Imenus[],
     })
 
     return {

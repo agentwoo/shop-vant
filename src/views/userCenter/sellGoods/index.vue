@@ -15,10 +15,10 @@ const onClickLeft = () => {
 }
 
 // 获取已发布的商品列表
-onMounted(async () => {
-    let res = await getpubgoodsApi()
-    goodsItemStore.pubGoodsList = res.data
-})
+// onMounted(async () => {
+//     let res = await getpubgoodsApi()
+//     goodsItemStore.pubGoodsList = res.data
+// })
 
 // 删除发布的商品
 async function delpubgood(goods_id: string) {

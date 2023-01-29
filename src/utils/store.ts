@@ -37,3 +37,33 @@ export interface pubgood {
     is_delgoods: string,
     pub_user_id: string,
 }
+
+
+
+// 所有商品相关配置
+export interface Igoods {
+    goods_id: number,
+    goods_title: string,
+    goods_desc: string,
+    goods_origin_price: string,
+    goods_present_price: string,
+    goods_title_img: string,
+    goods_contact: string,
+    goods_kind: string,
+    goods_pub_time: string,
+    goods_views: string,
+    is_delgoods: string,
+    goods_status: string,
+    pub_user_id: number,
+    goods_swiper_img1: string,
+    goods_swiper_img2: string,
+    goods_swiper_img3: string,
+    goods_swiper_img4: string,
+}
+
+// 商品分类相关配置
+export interface Imenus {
+    kind_id: number,
+    goods_kind: string,
+    value: string,
+}

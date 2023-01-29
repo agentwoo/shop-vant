@@ -1,6 +1,6 @@
 <!-- 商品详情 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref, watch, onMounted } from 'vue'
+import { reactive, toRefs, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
 import { useGoodsItemStore } from '@/store/index'
@@ -26,27 +26,19 @@ const data = reactive({
         pub_time: '',
         is_collect: '',
         order_states: '',
-    },
-    goodsId: '',
+    }
 })
-
-
-
 
 const goodsId = ref()
 watch(() => route.params, newVal => {
-    data.goodsId = newVal.id as string
-    // console.log('-------', newVal.id);
+    const item = goodsItemStore.goodsItem.find((v) => v.goods_id === newVal.id)
+    goodsId.value = newVal.id
+    if (item) {
+        data.item = item;
+    }
 }, {
     immediate: true
 })
-
-onMounted(async () => {
-
-})
-
-
-
 
 // 获取商品是否被购买并给icon赋予初始值
 let item = goodsItemStore.goodsItem.find(v => v.goods_id === goodsId.value)

@@ -17,11 +17,13 @@ const onClickLeft = () => {
 <template>
     <div class="container">
         <van-nav-bar title="免费商品" fixed left-text="返回" left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.freeGoods$.length === 0" class="container_empty">
+        <div v-if="goodsItemStore.freeGoodsList.length === 0" class="container_empty">
             <van-empty description="暂无商品" />
         </div>
         <div v-else class="container_content">
-            <GoodsItem :goodsItemDesc="goodsItemStore.freeGoods$"></GoodsItem>
+            <!-- <GoodsItem :goodsItemDesc="goodsItemStore.freeGoods$"></GoodsItem> -->
+            <GoodsItem :goodsItemDesc="goodsItemStore.freeGoodsList"></GoodsItem>
+
         </div>
         <van-divider>没有更多了</van-divider>
     </div>

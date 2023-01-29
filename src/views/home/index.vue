@@ -1,19 +1,50 @@
 <!-- 首页 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref } from 'vue'
+import { reactive, toRefs, ref, onMounted } from 'vue'
 import { showSuccessToast, showFailToast } from 'vant';
 
 import router from '@/router';
 import Category from '@/views/home/category/index.vue'
 import GoodsItem from '@/components/goodsItem/index.vue'
-import { useGoodsItemStore } from '@/store/index'
+import { useGoodsItemStore, useMenusStore } from '@/store/index'
+import {
+    getswiperApi,
+    getallgoodsListApi,
+    getnewgoodsListApi,
+    gethotgoodsListApi,
+    getfreegoodsListApi,
+    getgoodskindApi,
+} from '@/http/index'
 
 
 const goodsItemStore = useGoodsItemStore()
-const images = [
-    'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',
-    'https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg',
-];
+const menusStore = useMenusStore()
+const data = reactive({
+    images: [] as string[],
+})
+
+onMounted(async () => {
+    // 获取轮播图
+    let resswiper = await getswiperApi()
+    data.images = resswiper.data[0]
+    // 获取所有商品数据
+    let resgoods = await getallgoodsListApi()
+    goodsItemStore.allGoodsList = resgoods.data
+    // 获取最新商品
+    let resnewgoods = await getnewgoodsListApi()
+    goodsItemStore.newGoodsList = resnewgoods.data
+    // 获取热门商品
+    let reshotgoods = await gethotgoodsListApi()
+    goodsItemStore.hotGoodsList = reshotgoods.data
+    // 获取免费商品
+    let resfreegoods = await getfreegoodsListApi()
+    goodsItemStore.freeGoodsList = resfreegoods.data
+    // 获取商品分类
+    let resgoodskind = await getgoodskindApi()
+    menusStore.menus1 = resgoodskind.data
+    // console.log('--------------1111', resgoodskind.data);
+})
+
 
 // 查询待办事项
 const search = () => {
@@ -41,7 +72,7 @@ const search = () => {
         </div>
         <div class="container_swiper">
             <van-swipe :autoplay="3000" lazy-render style="height:200px">
-                <van-swipe-item v-for="image in images" :key="image">
+                <van-swipe-item v-for="image in data.images" :key="image">
                     <img :src="image" style="width: 100%;" />
                 </van-swipe-item>
             </van-swipe>
@@ -49,7 +80,8 @@ const search = () => {
         <div class="container_recommend">推荐商品</div>
         <Category></Category>
         <div class="container_layout">
-            <GoodsItem :goodsItemDesc="goodsItemStore.stateOneGoodsList$"></GoodsItem>
+            <!-- <GoodsItem :goodsItemDesc="goodsItemStore.stateOneGoodsList$"></GoodsItem> -->
+            <GoodsItem :goodsItemDesc="goodsItemStore.allGoodsList"></GoodsItem>
         </div>
         <van-divider>没有更多了</van-divider>
     </div>

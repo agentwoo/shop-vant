@@ -1,12 +1,12 @@
 <!-- 发布商品 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref } from 'vue'
-import { showFailToast, showLoadingToast, showSuccessToast } from 'vant'
-import { useGoodsItemStore, useMenusStore } from '@/store/index'
+import { reactive } from 'vue'
+import { showFailToast, showSuccessToast } from 'vant'
+import { useMenusStore } from '@/store/index'
 import router from '@/router';
 
 
-import { postImgApi, pubgoodsAPi } from '@/http/index'
+import { pubgoodsAPi } from '@/http/index'
 import axios from 'axios';
 // 数据
 const data = reactive({
@@ -17,13 +17,22 @@ const data = reactive({
         origin_price: '',
         present_price: '',
         contact: '',
+        cover_img: '',
+        cover_list: [] as string[],
     },
     // 类型选择器
     columns: useMenusStore().menus,
+    // columns: useMenusStore().menus1,
+
+
+
+
     result: '',
     showPicker: false,
     // 图片
     fileTitle: [],
+    // 详情图
+    fileList: [],
 })
 
 // 验证规则
@@ -67,32 +76,23 @@ const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string }[] })
     data.showPicker = false;
 };
 
-// 上传图片
-const fileList = ref([
-    { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-    { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' }
-]);
-
-// interface goodsInfo {
-//     contact: string,
-//     goods_desc: string,
-//     goods_title: string,
-//     kind: string,
-//     origin_price: string,
-//     ppresent_price: string,
-// }
 
 // 表单提交
 async function onSubmit(values: any) {
     let goodsInfo = values
+
     let res = await pubgoodsAPi({
         goods_title: goodsInfo.goods_title,
         goods_desc: goodsInfo.goods_desc,
         goods_origin_price: goodsInfo.origin_price,
         goods_present_price: goodsInfo.present_price,
-        goods_title_img: 'http://localhost:3000/api/uploads/goods_pic/1673840606250.jpeg',
+        goods_title_img: data.pub_goods.cover_img,
         goods_contact: goodsInfo.contact,
         goods_kind: goodsInfo.kind,
+        goods_swiper_img1: data.pub_goods.cover_list[0],
+        goods_swiper_img2: data.pub_goods.cover_list[1],
+        goods_swiper_img3: data.pub_goods.cover_list[2],
+        goods_swiper_img4: data.pub_goods.cover_list[3],
     })
 
     if (!res.ok) return showFailToast(res.message)
@@ -105,24 +105,48 @@ async function onSubmit(values: any) {
     data.pub_goods.origin_price = '';
     data.pub_goods.present_price = '';
     data.pub_goods.contact = '';
+    data.fileTitle = [];
+    data.fileList = [];
     data.result = ''
 }
 
-
 // 提交图片
 async function onUpload(upload_file: any) {
-    // upload_file.status = 'uploading'
-
+    upload_file.status = 'uploading'
     const formData = new FormData()
-    formData.append('file', upload_file.file)
-
-    const res = await axios.post('/api/uploadfile', { cover_img: formData }, {
+    formData.append('cover_img', upload_file.file)
+    const res = await axios.post('/api/uploadfile', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'charset': 'utf-8',
         }
     })
-    console.log('---------', res.data);
+    if (res.data.ok) {
+        upload_file.status = 'done'
+        data.pub_goods.cover_img = `http://localhost:3000/api/uploads/goods_pic/${res.data.data}`
+    } else {
+        upload_file.status = 'failed'
+    }
+}
+
+// 详情图
+async function onUploadList(upload_file: any) {
+    upload_file.status = 'uploading'
+    const formData = new FormData()
+    formData.append('cover_img', upload_file.file)
+    const res = await axios.post('/api/uploadfile', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'charset': 'utf-8',
+        }
+    })
+    if (res.data.ok) {
+        upload_file.status = 'done'
+        data.pub_goods.cover_list.push(`http://localhost:3000/api/uploads/goods_pic/${res.data.data}`)
+
+    } else {
+        upload_file.status = 'failed'
+    }
 }
 
 
@@ -157,11 +181,12 @@ async function onUpload(upload_file: any) {
                             <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload" />
                         </template>
                     </van-field>
-                    <!-- <van-field name="uploader" label="详情图">
+                    <!-- 详情图 -->
+                    <van-field name="uploader" label="详情图" required>
                         <template #input>
-                            <van-uploader v-model="fileList" multiple :max-count="4" />
+                            <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList" />
                         </template>
-                    </van-field> -->
+                    </van-field>
                 </van-cell-group>
                 <div style="margin: 16px;">
                     <van-button round block type="primary" native-type="submit">
