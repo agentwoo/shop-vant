@@ -20,8 +20,14 @@ export const getnewgoodsListApi = () => http({ url: 'api/getnewgoodsList', metho
 export const gethotgoodsListApi = () => http({ url: 'api/gethotgoodsList', method: 'get' })
 // 获取免费商品
 export const getfreegoodsListApi = () => http({ url: 'api/getfreegoodsList', method: 'get' })
+// 获取单个商品
+export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: 'api/getgoodsdesc', method: 'post', data })
+// 商品点击量加一
+export const updateviewsApi = (data: { goods_id: string }) => http({ url: 'api/updateviews', method: 'post', data })
 
-// 获取商品分类
+
+
+// 获取商品分类菜单
 export const getgoodskindApi = () => http({ url: 'api/getgoodskind', method: 'get' })
 
 

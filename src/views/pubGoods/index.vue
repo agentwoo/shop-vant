@@ -88,12 +88,15 @@ async function onSubmit(values: any) {
         goods_present_price: goodsInfo.present_price,
         goods_title_img: data.pub_goods.cover_img,
         goods_contact: goodsInfo.contact,
+        goods_pid: '1',
         goods_kind: goodsInfo.kind,
         goods_swiper_img1: data.pub_goods.cover_list[0],
         goods_swiper_img2: data.pub_goods.cover_list[1],
         goods_swiper_img3: data.pub_goods.cover_list[2],
         goods_swiper_img4: data.pub_goods.cover_list[3],
     })
+    console.log(res);
+
 
     if (!res.ok) return showFailToast(res.message)
     router.push({ path: '/userCenter/pubGoods' })

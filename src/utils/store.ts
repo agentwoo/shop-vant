@@ -49,6 +49,7 @@ export interface Igoods {
     goods_present_price: string,
     goods_title_img: string,
     goods_contact: string,
+    goods_pid: number,
     goods_kind: string,
     goods_pub_time: string,
     goods_views: string,

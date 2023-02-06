@@ -4,6 +4,7 @@ import { reactive, toRefs, ref, watch } from 'vue'
 import router from '@/router';
 import { useGoodsItemStore } from '@/store/index'
 import { Igoods } from '@/utils/store'
+import { updateviewsApi } from '@/http/index'
 
 type Props = {
     goodsItemDesc?: Igoods[]
@@ -12,20 +13,19 @@ defineProps<Props>()
 
 const goodsItemStore = useGoodsItemStore()
 
-// 跳转详情页-----------未完善
-const toGoodsDesc = (goodsId: number) => {
+// 跳转详情页
+async function toGoodsDesc(goodsId: number) {
     router.push({
         name: 'goodsDesc',
         params: { id: goodsId }
     })
-
-    // 点击时views数量加一，还需调用后台接口
-    // let index = goodsItemStore.goodsItem.findIndex(v => v.goods_id === goodsId)
-    // let item = goodsItemStore.goodsItem.find(v => v.goods_id === goodsId)
-    // if (!item) return
-    // let views = Number(item.views) + 1
-    // goodsItemStore.goodsItem.splice(index, 1, { ...item, views: String(views) })
+    // 点击时views数量加一
+    let res = await updateviewsApi({ goods_id: String(goodsId) })
+    console.log('-----', res);
 }
+
+
+
 
 </script>
 

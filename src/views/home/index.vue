@@ -39,9 +39,11 @@ onMounted(async () => {
     // 获取免费商品
     let resfreegoods = await getfreegoodsListApi()
     goodsItemStore.freeGoodsList = resfreegoods.data
+
+
     // 获取商品分类
-    let resgoodskind = await getgoodskindApi()
-    menusStore.menus1 = resgoodskind.data
+    // let resgoodskind = await getgoodskindApi()
+    // menusStore.menus1 = resgoodskind.data
     // console.log('--------------1111', resgoodskind.data);
 })
 

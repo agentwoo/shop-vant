@@ -1,17 +1,24 @@
 <!-- 最新商品 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref } from 'vue'
+import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useGoodsItemStore } from '@/store/index'
 import GoodsItem from '@/components/goodsItem/index.vue'
 
-
+// import { getnewgoodsListApi } from '@/http/index'
 const goodsItemStore = useGoodsItemStore()
 // navbar
 const router = useRouter()
 const onClickLeft = () => {
     router.back()
 }
+
+// onMounted(async () => {
+//     let resnewgoods = await getnewgoodsListApi()
+//     goodsItemStore.newGoodsList = resnewgoods.data
+// })
+
+
 </script>
 
 <template>
