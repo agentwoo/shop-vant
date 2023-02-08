@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 import imgUrl from '@/assets/pig.jpeg';
 import { IgoodsDesc, pubgood } from '@/utils/store'
-import { Igoods, Imenus } from '@/utils/store'
+import { Igoods, Imenus, Iorder } from '@/utils/store'
 
 const goodsItem = [
     {
@@ -96,14 +96,16 @@ export const useGoodsItemStore = defineStore('goods', () => {
         newGoodsList: [] as Igoods[],
         hotGoodsList: [] as Igoods[],
         freeGoodsList: [] as Igoods[],
+        orderGoodsList: [] as Iorder[], //订单列表
+        finishedOrderGoodsList: [] as Iorder[], //已完成订单列表
+
 
 
 
 
         collectGoodsList: [] as IgoodsDesc[],//收藏列表
         expCollectGoodsList: [] as IgoodsDesc[],//失效的收藏链接
-        orderGoodsList: [] as IgoodsDesc[], //订单列表
-        finishedOrderGoodsList: [] as IgoodsDesc[], //已完成订单列表
+
 
         pubGoodsList: [] as pubgood[],//发布商品列表
     })

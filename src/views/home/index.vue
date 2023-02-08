@@ -7,14 +7,7 @@ import router from '@/router';
 import Category from '@/views/home/category/index.vue'
 import GoodsItem from '@/components/goodsItem/index.vue'
 import { useGoodsItemStore, useMenusStore } from '@/store/index'
-import {
-    getswiperApi,
-    getallgoodsListApi,
-    getnewgoodsListApi,
-    gethotgoodsListApi,
-    getfreegoodsListApi,
-    getgoodskindApi,
-} from '@/http/index'
+import { getswiperApi, getallgoodsListApi, } from '@/http/index'
 
 
 const goodsItemStore = useGoodsItemStore()
@@ -30,15 +23,6 @@ onMounted(async () => {
     // 获取所有商品数据
     let resgoods = await getallgoodsListApi()
     goodsItemStore.allGoodsList = resgoods.data
-    // 获取最新商品
-    let resnewgoods = await getnewgoodsListApi()
-    goodsItemStore.newGoodsList = resnewgoods.data
-    // 获取热门商品
-    let reshotgoods = await gethotgoodsListApi()
-    goodsItemStore.hotGoodsList = reshotgoods.data
-    // 获取免费商品
-    let resfreegoods = await getfreegoodsListApi()
-    goodsItemStore.freeGoodsList = resfreegoods.data
 
 
     // 获取商品分类

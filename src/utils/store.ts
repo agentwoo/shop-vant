@@ -68,3 +68,19 @@ export interface Imenus {
     goods_kind: string,
     value: string,
 }
+
+
+// 商品订单相关配置
+export interface Iorder {
+    order_id: number,
+    is_delorder: string,
+    order_create_time: string,
+    buy_user_id: number,
+    goods_id: number,
+    goods_present_price: number,
+    goods_title_img: string,
+    goods_contact: string,
+    goods_status: string,
+    goods_title: string,
+    goods_desc: string,
+}

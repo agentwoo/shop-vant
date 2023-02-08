@@ -1,6 +1,6 @@
 <!-- 商品页 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref, watch } from 'vue'
+import { reactive, toRefs, ref, watch, onMounted } from 'vue'
 import router from '@/router';
 import { useGoodsItemStore } from '@/store/index'
 import { Igoods } from '@/utils/store'
@@ -21,10 +21,7 @@ async function toGoodsDesc(goodsId: number) {
     })
     // 点击时views数量加一
     let res = await updateviewsApi({ goods_id: String(goodsId) })
-    console.log('-----', res);
 }
-
-
 
 
 </script>

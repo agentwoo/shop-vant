@@ -20,14 +20,17 @@ const onClickLeft = () => {
 }
 
 // 取消订单
-async function cancelOrder(goods_id: number) {
-    let res = await cancelordergoodsApi({ goods_id: goods_id })
-    if (res.ok) showSuccessToast('取消成功！')
-    let index = goodsItemStore.orderGoodsList.findIndex(v => v.goods_id === goods_id)
-    goodsItemStore.orderGoodsList.splice(index, 1)
+const cancelOrder = () => {
+    // let index = goodsItemStore.goodsItem.findIndex(v => v.goods_id === item.goods_id)
+    // let index2 = goodsItemStore.orderGoodsList.findIndex(v => v.goods_id === item.goods_id)
+    // if (index === -1 || index2 === -1) return showFailToast('出现错误！')
+    // goodsItemStore.goodsItem.splice(index, 1, { ...item, order_states: '1' })
+    // goodsItemStore.orderGoodsList.splice(index2, 1)
+    // showSuccessToast('成功取消')
+
+
+
 }
-
-
 
 // 确认收货
 const confirmOrder = () => {
@@ -62,7 +65,7 @@ onMounted(async () => {
                 <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                     :thumb=item.goods_title_img>
                     <template #footer>
-                        <van-button size="mini" @click="cancelOrder(item.goods_id)" v-if="item.goods_status === '2'">
+                        <van-button size="mini" @click="cancelOrder()" v-if="item.goods_status === '2'">
                             取消订单
                         </van-button>
                         <van-button size="mini" @click="confirmOrder()" v-if="item.goods_status === '3'">

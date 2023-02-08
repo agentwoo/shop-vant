@@ -11,24 +11,39 @@ export const registerApi = (data: Idata): any => http({ url: '/api/register', me
 
 
 // 获取轮播图
-export const getswiperApi = () => http({ url: 'api/getswiper', method: 'get' })
+export const getswiperApi = () => http({ url: '/api/getswiper', method: 'get' })
 // 获取全部商品
-export const getallgoodsListApi = () => http({ url: 'api/getallgoodsList', method: 'get' })
+export const getallgoodsListApi = () => http({ url: '/api/getallgoodsList', method: 'get' })
 // 获取最新商品
-export const getnewgoodsListApi = () => http({ url: 'api/getnewgoodsList', method: 'get' })
+export const getnewgoodsListApi = () => http({ url: '/api/getnewgoodsList', method: 'get' })
 // 获取热门商品
-export const gethotgoodsListApi = () => http({ url: 'api/gethotgoodsList', method: 'get' })
+export const gethotgoodsListApi = () => http({ url: '/api/gethotgoodsList', method: 'get' })
 // 获取免费商品
-export const getfreegoodsListApi = () => http({ url: 'api/getfreegoodsList', method: 'get' })
+export const getfreegoodsListApi = () => http({ url: '/api/getfreegoodsList', method: 'get' })
 // 获取单个商品
-export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: 'api/getgoodsdesc', method: 'post', data })
+export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: '/api/getgoodsdesc', method: 'post', data })
 // 商品点击量加一
-export const updateviewsApi = (data: { goods_id: string }) => http({ url: 'api/updateviews', method: 'post', data })
+export const updateviewsApi = (data: { goods_id: string }) => http({ url: '/api/updateviews', method: 'post', data })
+
+
+
+// 商品购买
+export const buygoodsitemApi = (data: { goods_id: number }): any => http({ url: '/api/buygoodsitem', method: 'post', data })
+// 获取商品订单
+export const getordergoodsApi = (): any => http({ url: '/api/getordergoods', method: 'post' })
+// 获取已完成商品订单
+export const getfinishordergoodsApi = (): any => http({ url: '/api/getfinishordergoods', method: 'post' })
+// 取消订单
+export const cancelordergoodsApi = (data: { goods_id: number }): any => http({ url: '/api/cancelordergoods', method: 'post', data })
+
+
+
+
 
 
 
 // 获取商品分类菜单
-export const getgoodskindApi = () => http({ url: 'api/getgoodskind', method: 'get' })
+export const getgoodskindApi = () => http({ url: '/api/getgoodskind', method: 'get' })
 
 
 

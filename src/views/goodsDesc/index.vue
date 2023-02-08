@@ -1,19 +1,16 @@
 <!-- 商品详情 -->
 <script lang='ts' setup>
-import { reactive, watch } from 'vue'
+import { reactive, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
-import { useGoodsItemStore } from '@/store/index'
 import { Igoods } from '@/utils/store'
 
-
-
-import { getgoodsdescApi } from '@/http/index'
+import { getgoodsdescApi, buygoodsitemApi } from '@/http/index'
+import { showConfirmDialog } from 'vant';
 
 
 const route = useRoute()
 const router = useRouter()
-const goodsItemStore = useGoodsItemStore()
 const data = reactive({
     item: {
         goods_id: 0,
@@ -35,41 +32,50 @@ const data = reactive({
         goods_swiper_img3: "",
         goods_swiper_img4: ""
     },
+    id: ''
 })
 
 
-
-
-
 watch(() => route.params, (newVal) => {
-    const item = goodsItemStore.allGoodsList.find(v => v.goods_id === Number(newVal.id))
-    if (item) {
-        data.item = item
-    }
-    // let goodsid = String(newVal.id)
-    // getgoodsdesc(goodsid)
+    data.id = newVal.id as string
 }, {
     immediate: true,
 })
 
-// async function getgoodsdesc(goodsid: string) {
-//     console.log('--', goodsid);
-
-//     let resgoodsdesc = await getgoodsdescApi({ goods_id: goodsid })
-//     console.log('----------------', resgoodsdesc);
-// }
-
-
+onMounted(async () => {
+    let resgoodsdesc = await getgoodsdescApi({ goods_id: data.id })
+    data.item = resgoodsdesc.data[0]
+})
 
 
 const onClickLeft = () => {
     router.back()
 }
 
-// 购买商品
-async function getGoodsItem(item: Igoods) {
 
+
+// 购买商品
+async function getGoodsItem(goods_id: number) {
+    let res = await buygoodsitemApi({ goods_id: goods_id })
+    if (res.ok) {
+        showSuccessToast('下单成功，联系卖家发货！')
+        router.push({
+            path: '/userCenter/getGoods'
+        })
+    }
 }
+const confirmbuygoods = (goods_id: number) => {
+    showConfirmDialog({
+        title: '提示',
+        message:
+            '预约购买成功后，您将获得卖家的联系方式，请及时与卖家取得联系，进行线下当面付款交易。注意:该产品在您预约购买后，会自动下架，您是该产品的唯一买家。',
+    }).then(() => {
+        getGoodsItem(goods_id)
+    }).catch(() => {
+        showFailToast('取消下单！')
+    });
+}
+
 
 </script>
 
@@ -94,7 +100,7 @@ async function getGoodsItem(item: Igoods) {
             <div class="container_goodsDesc_pirce">
                 <span>￥{{ data.item.goods_origin_price }}</span>
                 <span>原价￥{{ data.item.goods_present_price }}</span>
-                <span>发布时间{{ data.item.goods_pub_time }}</span>
+                <span>发布时间：{{ data.item.goods_pub_time.slice(0, 10) }}</span>
             </div>
             <div class="van-ellipsis">{{ data.item.goods_title }}</div>
             <div class="van-multi-ellipsis--l3">
@@ -103,7 +109,7 @@ async function getGoodsItem(item: Igoods) {
         </div>
         <van-action-bar>
             <van-action-bar-icon icon="star" text="已收藏" color="#ff5000" />
-            <van-action-bar-button type="danger" text="购买" @click="getGoodsItem(data.item)" />
+            <van-action-bar-button type="danger" text="预约购买" @click="confirmbuygoods(data.item.goods_id)" />
         </van-action-bar>
     </div>
 </template>
@@ -133,9 +139,8 @@ async function getGoodsItem(item: Igoods) {
         }
 
         span:nth-child(3) {
-            position: relative;
-            left: -130px;
-            top: 20px;
+            display: flex;
+            justify-content: end;
         }
     }
 
