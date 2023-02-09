@@ -5,7 +5,13 @@ import { useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
 import { useGoodsItemStore } from '@/store/index'
 import { IgoodsDesc } from '@/utils/store'
-import { getordergoodsApi, getfinishordergoodsApi, cancelordergoodsApi } from '@/http/index'
+import {
+    gettradeordergoodsApi,
+    getshippedordergoodsApi,
+    getfinishordergoodsApi,
+    cancelordergoodsApi,
+    confirmordergoodsApi
+} from '@/http/index'
 
 
 
@@ -23,32 +29,37 @@ const onClickLeft = () => {
 async function cancelOrder(goods_id: number) {
     let res = await cancelordergoodsApi({ goods_id: goods_id })
     if (res.ok) showSuccessToast('取消成功！')
-    let index = goodsItemStore.orderGoodsList.findIndex(v => v.goods_id === goods_id)
-    goodsItemStore.orderGoodsList.splice(index, 1)
+    let index = goodsItemStore.tradeordergoods.findIndex(v => v.goods_id === goods_id)
+    goodsItemStore.tradeordergoods.splice(index, 1)
 }
 
 
 
 // 确认收货
-const confirmOrder = () => {
-    // let index = goodsItemStore.goodsItem.findIndex(v => v.goods_id === item.goods_id)
-    // let index2 = goodsItemStore.orderGoodsList.findIndex(v => v.goods_id === item.goods_id)
-    // if (index === -1 || index2 === -1) return showFailToast('出现错误！')
-    // goodsItemStore.goodsItem.splice(index, 1, { ...item, order_states: '4' })
-    // goodsItemStore.orderGoodsList.splice(index2, 1)
-    // goodsItemStore.finishedOrderGoodsList.unshift({ ...item, order_states: '4' })
-    // showSuccessToast('确认收货')
+async function confirmOrder(goods_id: number) {
+    let res = await confirmordergoodsApi({ goods_id: goods_id })
+    if (res.ok) showSuccessToast('收货成功！')
+    // 将商品添加到已完成订单列表
+    let item = goodsItemStore.shippedordergoods.find(v => v.goods_id === goods_id)
+    if (!item) return showFailToast('系统繁忙！')
+    goodsItemStore.finishedOrderGoodsList.push(item)
+    // 将商品从订单列表移除
+    let index = goodsItemStore.shippedordergoods.findIndex(v => v.goods_id === goods_id)
+    goodsItemStore.shippedordergoods.splice(index, 1)
 }
 
 
 onMounted(async () => {
-    // 获取商品订单
-    let res = await getordergoodsApi()
-    if (!res.ok) showFailToast('获取订单失败！')
-    goodsItemStore.orderGoodsList = res.data
+    // 获取已发货商品订单列表
+    let res = await gettradeordergoodsApi()
+    if (!res.ok) showFailToast('系统繁忙！')
+    goodsItemStore.tradeordergoods = res.data
+    // 获取待发货商品订单列表
+    let resshipped = await getshippedordergoodsApi()
+    goodsItemStore.shippedordergoods = resshipped.data
     // 获取已完成商品订单
     let finishres = await getfinishordergoodsApi()
-    if (!finishres.ok) showFailToast('获取已完成订单失败！')
+    if (!finishres.ok) showFailToast('系统繁忙！')
     goodsItemStore.finishedOrderGoodsList = finishres.data
 })
 
@@ -57,15 +68,26 @@ onMounted(async () => {
 <template>
     <div class="container">
         <van-nav-bar title="订单列表" left-text="返回" fixed left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.orderGoodsList.length !== 0" class="container_order">
-            <div v-for="item in goodsItemStore.orderGoodsList" :key="item.goods_id" class="container_order_card">
+        <div v-if="goodsItemStore.tradeordergoods.length !== 0" class="container_order">
+            <van-divider>待发货</van-divider>
+            <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id" class="container_order_card">
                 <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                     :thumb=item.goods_title_img>
                     <template #footer>
                         <van-button size="mini" @click="cancelOrder(item.goods_id)" v-if="item.goods_status === '2'">
                             取消订单
                         </van-button>
-                        <van-button size="mini" @click="confirmOrder()" v-if="item.goods_status === '3'">
+                    </template>
+                </van-card>
+            </div>
+        </div>
+        <div v-if="goodsItemStore.shippedordergoods.length !== 0" class="container_order">
+            <van-divider>已发货</van-divider>
+            <div v-for="item in goodsItemStore.shippedordergoods" :key="item.goods_id" class="container_order_card">
+                <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                    :thumb=item.goods_title_img>
+                    <template #footer>
+                        <van-button size="mini" @click="confirmOrder(item.goods_id)" v-if="item.goods_status === '3'">
                             确认收货
                         </van-button>
                     </template>
@@ -80,8 +102,8 @@ onMounted(async () => {
                     :thumb=item.goods_title_img />
             </div>
         </div>
-        <div v-if="goodsItemStore.orderGoodsList.length === 0 && goodsItemStore.finishedOrderGoodsList.length == 0"
-            class="container_empty">
+        <div v-if="goodsItemStore.tradeordergoods.length === 0 && goodsItemStore.finishedOrderGoodsList.length == 0
+        && goodsItemStore.shippedordergoods.length === 0" class="container_empty">
             <van-empty description="暂无订单" />
         </div>
     </div>
@@ -102,7 +124,7 @@ onMounted(async () => {
     }
 
     &_finishedOrder {
-        margin-top: 10vh;
+        // margin-top: 10vh;
 
         &_card {
             margin-top: 1vh;

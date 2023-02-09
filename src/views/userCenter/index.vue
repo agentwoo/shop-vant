@@ -22,7 +22,7 @@ const data = [
         path: '/userCenter/getGoods', icon: 'cart-o', title: '我的订单',
     },
     {
-        path: '/userCenter/sellGoods', icon: 'logistics', title: '已卖出',
+        path: '/userCenter/sellGoods', icon: 'logistics', title: '交易中心',
     },
     {
         path: '/userCenter/pubGoods', icon: 'back-top', title: '我的发布',

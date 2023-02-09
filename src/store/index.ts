@@ -92,12 +92,19 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
         searchVal: '',//搜索
         searchRes: [] as Igoods[],//搜索返回值
-        allGoodsList: [] as Igoods[],//全部商品，由服务器获取
-        newGoodsList: [] as Igoods[],
-        hotGoodsList: [] as Igoods[],
-        freeGoodsList: [] as Igoods[],
-        orderGoodsList: [] as Iorder[], //订单列表
+        allGoodsList: [] as Igoods[],//全部商品
+        newGoodsList: [] as Igoods[],//最新商品
+        hotGoodsList: [] as Igoods[],//热门商品
+        freeGoodsList: [] as Igoods[],//免费商品
+
+        tradeordergoods: [] as Iorder[], //待发货订单列表
+        shippedordergoods: [] as Iorder[], //待收货订单列表
+
         finishedOrderGoodsList: [] as Iorder[], //已完成订单列表
+
+        tradeGoodsList: [] as Iorder[], //交易中的待发货列表
+        shippedGoodsList: [] as Iorder[], //交易中的已发货列表
+        tradefinishedGoodsList: [] as Iorder[], //交易完成列表
 
 
 

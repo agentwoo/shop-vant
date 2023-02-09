@@ -4,7 +4,7 @@ import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useGoodsItemStore } from '@/store/index'
 import { getpubgoodsApi, delgoodsitemApi } from '@/http/index'
-import { showSuccessToast } from 'vant';
+import { showFailToast, showSuccessToast } from 'vant';
 
 const goodsItemStore = useGoodsItemStore()
 // navbar
@@ -21,6 +21,10 @@ onMounted(async () => {
 
 // 删除发布的商品
 async function delpubgood(goods_id: string) {
+    // 当商品状态goods_status等于1时，才允许删除
+    let item1 = goodsItemStore.pubGoodsList.find(v => v.goods_id === goods_id)
+    if (item1?.goods_status !== '1') return showFailToast('该商品已被下单，不允许删除！')
+    // 删除商品
     let id = goods_id.toString()
     let res = await delgoodsitemApi({ goods_id: id })
     if (!res.ok) return
@@ -31,6 +35,8 @@ async function delpubgood(goods_id: string) {
     if (index === -1 || !item) return
     goodsItemStore.pubGoodsList.splice(index, 1, { ...item, is_delgoods: '1' })
 }
+
+
 </script>
 
 <template>
@@ -42,11 +48,17 @@ async function delpubgood(goods_id: string) {
         <div v-else>
             <van-swipe-cell v-for="item in goodsItemStore.undelgoodsList$" :key="item.goods_id" class="container_card">
                 <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img />
-                <template #right>
-                    <van-button square text="删除" type="danger" class="delete-button"
-                        @click="delpubgood(item.goods_id)" />
-                </template>
+                    class="goods-card" :thumb=item.goods_title_img>
+                    <template #footer>
+                        <van-button size="mini" @click="delpubgood(item.goods_id)" v-if="item.goods_status === '1'">
+                            取消发布
+                        </van-button>
+                    </template>
+                    <!-- <template #right>
+                        <van-button square text="删除" type="danger" class="delete-button"
+                            @click="delpubgood(item.goods_id)" />
+                    </template> -->
+                </van-card>
             </van-swipe-cell>
         </div>
     </div>

@@ -3,8 +3,10 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useGoodsItemStore } from '@/store/index'
-import { delgoodsitemApi, getpubgoodsApi } from '@/http/index'
-import { showSuccessToast } from 'vant';
+// import { delgoodsitemApi, getpubgoodsApi } from '@/http/index'
+import { gettradegoodsApi, getshippedgoodsApi, gettradefinishedgoodsApi, confirmsendgoodsApi } from '@/http/index'
+
+import { showFailToast, showSuccessToast } from 'vant';
 
 
 const goodsItemStore = useGoodsItemStore()
@@ -14,40 +16,79 @@ const onClickLeft = () => {
     router.back()
 }
 
-// 获取已发布的商品列表
-// onMounted(async () => {
-//     let res = await getpubgoodsApi()
-//     goodsItemStore.pubGoodsList = res.data
-// })
+// 获取商品列表
+onMounted(async () => {
+    // 待发货
+    let restradegoods = await gettradegoodsApi()
+    goodsItemStore.tradeGoodsList = restradegoods.data
 
-// 删除发布的商品
-async function delpubgood(goods_id: string) {
-    let id = goods_id.toString()
-    let res = await delgoodsitemApi({ goods_id: id })
-    if (!res.ok) return
+    // 待买家确认收货
+    let resshippedgoods = await getshippedgoodsApi()
+    goodsItemStore.shippedGoodsList = resshippedgoods.data
 
-    showSuccessToast('删除成功！')
-    let index = goodsItemStore.pubGoodsList.findIndex(v => v.goods_id === goods_id)
-    let item = goodsItemStore.pubGoodsList.find(v => v.goods_id === goods_id)
-    if (index === -1 || !item) return
-    goodsItemStore.pubGoodsList.splice(index, 1, { ...item, is_delgoods: '1' })
+    // 已完成交易
+    let restradefinishedgoods = await gettradefinishedgoodsApi()
+    goodsItemStore.tradefinishedGoodsList = restradefinishedgoods.data
+})
+
+
+// 确认发货
+async function sendoutgoods(goods_id: number) {
+    // 获取后台数据
+    let res = await confirmsendgoodsApi({ goods_id: goods_id })
+    if (!res.ok) return showFailToast('系统繁忙！')
+    // 在本地列表中操作
+    let index = goodsItemStore.tradeGoodsList.findIndex(v => v.goods_id === goods_id)
+    let item = goodsItemStore.tradeGoodsList.find(v => v.goods_id === goods_id)
+    goodsItemStore.tradeGoodsList.splice(index, 1)
+    if (!item) return showFailToast('系统繁忙！')
+    goodsItemStore.shippedGoodsList.push(item)
+    showSuccessToast('发货成功！')
 }
+
 </script>
 
 <template>
     <div class="container">
-        <van-nav-bar title="卖出" left-text="返回" left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.undelgoodsList$.length === 0" class="container_empty">
-            <van-empty description="暂无卖出商品" />
+        <van-nav-bar title="交易中心" left-text="返回" left-arrow @click-left="onClickLeft" />
+        <div v-if="goodsItemStore.tradeGoodsList.length === 0
+        && goodsItemStore.shippedGoodsList.length === 0
+        && goodsItemStore.tradefinishedGoodsList.length === 0" class="container_empty">
+            <van-empty description="暂无交易物品" />
         </div>
-        <div v-else>
-            <van-swipe-cell v-for="item in goodsItemStore.sellgoodsList$" :key="item.goods_id" class="container_card">
+        <div v-if="goodsItemStore.tradeGoodsList.length !== 0">
+            <van-divider>待发货</van-divider>
+            <van-swipe-cell v-for="item in goodsItemStore.tradeGoodsList" :key="item.goods_id" class="container_card">
                 <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img />
-                <template #right>
-                    <van-button square text="删除" type="danger" class="delete-button"
-                        @click="delpubgood(item.goods_id)" />
-                </template>
+                    class="goods-card" :thumb=item.goods_title_img>
+                    <template #footer>
+                        <van-button size="mini" @click="sendoutgoods(item.goods_id)" v-if="item.goods_status === '2'">
+                            确认发货
+                        </van-button>
+                    </template>
+                </van-card>
+            </van-swipe-cell>
+        </div>
+        <div v-if="goodsItemStore.shippedGoodsList.length !== 0">
+            <van-divider>等待买家确认收货</van-divider>
+            <van-swipe-cell v-for="item in goodsItemStore.shippedGoodsList" :key="item.goods_id" class="container_card">
+                <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                    class="goods-card" :thumb=item.goods_title_img>
+                    <template #footer>
+                        <van-button size="mini" v-if="item.goods_status === '3'">
+                            等待买家确认收货
+                        </van-button>
+                    </template>
+                </van-card>
+            </van-swipe-cell>
+        </div>
+        <div v-if="goodsItemStore.tradefinishedGoodsList.length !== 0">
+            <van-divider>交易完成</van-divider>
+            <van-swipe-cell v-for="item in goodsItemStore.tradefinishedGoodsList" :key="item.goods_id"
+                class="container_card">
+                <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                    class="goods-card" :thumb=item.goods_title_img>
+                </van-card>
             </van-swipe-cell>
         </div>
     </div>

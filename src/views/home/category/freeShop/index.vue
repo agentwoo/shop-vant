@@ -15,6 +15,8 @@ const onClickLeft = () => {
 
 onMounted(async () => {
     let resnewgoods = await getfreegoodsListApi()
+    // console.log('----------', resnewgoods);
+
     goodsItemStore.freeGoodsList = resnewgoods.data
 })
 
@@ -27,9 +29,7 @@ onMounted(async () => {
             <van-empty description="暂无商品" />
         </div>
         <div v-else class="container_content">
-            <!-- <GoodsItem :goodsItemDesc="goodsItemStore.freeGoods$"></GoodsItem> -->
             <GoodsItem :goodsItemDesc="goodsItemStore.freeGoodsList"></GoodsItem>
-
         </div>
         <van-divider>没有更多了</van-divider>
     </div>
