@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
 import { Igoods } from '@/utils/store'
 
-import { getgoodsdescApi, buygoodsitemApi } from '@/http/index'
+import { getgoodsdescApi, buygoodsitemApi, addcollectgoodsApi } from '@/http/index'
 import { showConfirmDialog } from 'vant';
 
 
@@ -76,6 +76,13 @@ const confirmbuygoods = (goods_id: number) => {
     });
 }
 
+// 加入收藏
+async function addcollectgoods(goods_id: number) {
+    let res = await addcollectgoodsApi({ goods_id: goods_id })
+    if (res.ok) showFailToast(res.message)
+    showSuccessToast(res.message)
+}
+
 
 </script>
 
@@ -108,7 +115,8 @@ const confirmbuygoods = (goods_id: number) => {
             </div>
         </div>
         <van-action-bar>
-            <van-action-bar-icon icon="star" text="已收藏" color="#ff5000" />
+            <!-- <van-action-bar-icon icon="star" text="已收藏" color="#ff5000" /> -->
+            <van-action-bar-button type="danger" text="加入收藏" @click="addcollectgoods(data.item.goods_id)" />
             <van-action-bar-button type="danger" text="预约购买" @click="confirmbuygoods(data.item.goods_id)" />
         </van-action-bar>
     </div>

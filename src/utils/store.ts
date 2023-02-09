@@ -49,7 +49,7 @@ export interface Igoods {
     goods_present_price: string,
     goods_title_img: string,
     goods_contact: string,
-    goods_pid: number,
+    goods_pid: string,
     goods_kind: string,
     goods_pub_time: string,
     goods_views: string,
@@ -65,7 +65,7 @@ export interface Igoods {
 // 商品分类相关配置
 export interface Imenus {
     kind_id: number,
-    goods_kind: string,
+    text: string,
     value: string,
 }
 
@@ -83,4 +83,20 @@ export interface Iorder {
     goods_status: string,
     goods_title: string,
     goods_desc: string,
+}
+
+
+// 商品收藏相关配置
+export interface Icollect {
+    collect_id: number,
+    collect_user_id: string,
+    goods_id: string,
+    collect_create_time: string,
+    goods_present_price: number,
+    goods_title_img: string,
+    goods_contact: string,
+    goods_status: string,
+    goods_title: string,
+    goods_desc: string,
+    is_delgoods: string,
 }

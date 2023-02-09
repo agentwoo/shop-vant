@@ -4,7 +4,6 @@ import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
 import { useGoodsItemStore } from '@/store/index'
-import { IgoodsDesc } from '@/utils/store'
 import {
     gettradeordergoodsApi,
     getshippedordergoodsApi,

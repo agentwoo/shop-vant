@@ -58,8 +58,20 @@ export const getshippedgoodsApi = (): any => http({ url: '/api/shippedgoods', me
 export const gettradefinishedgoodsApi = (): any => http({ url: '/api/tradefinishedgoods', method: 'post' })
 
 
+
+// 添加收藏
+export const addcollectgoodsApi = (data: { goods_id: number }): any => http({ url: '/api/addcollectgoods', method: 'post', data })
+// 获取收藏列表
+export const getcollectgoodsApi = (): any => http({ url: '/api/getcollectgoods', method: 'post' })
+// 删除收藏
+export const delcollectgoodsApi = (data: { collect_id: number }): any => http({ url: '/api/delcollectgoods', method: 'post', data })
+// 失效的商品
+export const expirecollectgoodsApi = (): any => http({ url: '/api/expirecollectgoods', method: 'post' })
+
+
+
 // 获取商品分类菜单
-export const getgoodskindApi = () => http({ url: '/api/getgoodskind', method: 'get' })
+export const getgoodskindApi = (): any => http({ url: '/api/getgoodskind', method: 'get' })
 
 
 

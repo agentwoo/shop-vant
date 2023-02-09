@@ -1,79 +1,7 @@
-import { computed, onMounted, reactive, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
 import { defineStore } from 'pinia';
-
-import imgUrl from '@/assets/pig.jpeg';
 import { IgoodsDesc, pubgood } from '@/utils/store'
-import { Igoods, Imenus, Iorder } from '@/utils/store'
-
-const goodsItem = [
-    {
-        goods_id: '1', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '1111111111111111111111111111111111111',
-        goods_desc: '13131213121312111111111111111111111', present_price: '1', origin_price: '666', views: '0', kind: '1',
-        pub_time: '2022-1-1', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '2', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '2222222222222222222222',
-        goods_desc: '13131213121312', present_price: '2', origin_price: '777', views: '0', kind: '2',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '3', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '3333333333333333333333',
-        goods_desc: '13131213121312', present_price: '3', origin_price: '888', views: '0', kind: '3',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '4', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '4444444444444444444444',
-        goods_desc: '13131213121312', present_price: '4', origin_price: '999', views: '0', kind: '4',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '5', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '5', origin_price: '1010', views: '0', kind: '5',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '6', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '4444444444444444444444',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '999', views: '0', kind: '6',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '7', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '1010', views: '0', kind: '7',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '8', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '5', origin_price: '1010', views: '0', kind: '1',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '9', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '4444444444444444444444',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '999', views: '0', kind: '1',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '10', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '1010', views: '0', kind: '1',
-        pub_time: '2023-1-1', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '11', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '5', origin_price: '1010', views: '0', kind: '1',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '12', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '4444444444444444444444',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '999', views: '0', kind: '1',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-    {
-        goods_id: '13', imgUrl: imgUrl, swiper_img: [{ img: imgUrl }], goods_title: '555555555555555555555',
-        goods_desc: '13131213121312', present_price: '0', origin_price: '1010', views: '0', kind: '1',
-        pub_time: '', is_collect: '0', order_states: '1'
-    },
-
-]
-
+import { Igoods, Imenus, Iorder, Icollect } from '@/utils/store'
 
 const arr = {
     replace: function <T>(list: T[], item: T, key: keyof T) {
@@ -88,8 +16,6 @@ const arr = {
 
 export const useGoodsItemStore = defineStore('goods', () => {
     const state = reactive({
-        goodsItem: goodsItem,//全部商品
-
         searchVal: '',//搜索
         searchRes: [] as Igoods[],//搜索返回值
         allGoodsList: [] as Igoods[],//全部商品
@@ -99,20 +25,14 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
         tradeordergoods: [] as Iorder[], //待发货订单列表
         shippedordergoods: [] as Iorder[], //待收货订单列表
-
         finishedOrderGoodsList: [] as Iorder[], //已完成订单列表
 
         tradeGoodsList: [] as Iorder[], //交易中的待发货列表
         shippedGoodsList: [] as Iorder[], //交易中的已发货列表
         tradefinishedGoodsList: [] as Iorder[], //交易完成列表
 
-
-
-
-
-        collectGoodsList: [] as IgoodsDesc[],//收藏列表
-        expCollectGoodsList: [] as IgoodsDesc[],//失效的收藏链接
-
+        collectGoodsList: [] as Icollect[], //收藏列表
+        expirecollectgoods: [] as Icollect[], //失效的收藏列表
 
         pubGoodsList: [] as pubgood[],//发布商品列表
     })
@@ -128,10 +48,8 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
     //商品详情分类
     function goodsKind(kind: string) {
-        return state.goodsItem.filter((v) => v.kind === kind && v.order_states === '1')
+        return state.allGoodsList.filter(v => v.goods_pid === kind)
     }
-
-
 
 
     // 前后端交互
@@ -183,8 +101,7 @@ const kindMenus = [
 ]
 export const useMenusStore = defineStore('menus', () => {
     const state = reactive({
-        menus: kindMenus,
-        menus1: [] as Imenus[],
+        menus: [] as Imenus[],
     })
 
     return {
