@@ -1,9 +1,19 @@
 import exp from 'constants'
 import http from './http'
 
+// 登录注册
 interface Idata {
     username: string,
     password: string,
+}
+
+interface Iupdategoodsdesc {
+    goods_id: number,
+    goods_title: string,
+    goods_desc: string,
+    goods_origin_price: string,
+    goods_present_price: string,
+    goods_contact: string,
 }
 
 export const loginApi = (data: Idata): any => http({ url: '/api/login', method: 'post', data })
@@ -78,5 +88,7 @@ export const getgoodskindApi = (): any => http({ url: '/api/getgoodskind', metho
 // 我的发布
 // 获取我发布的商品
 export const getpubgoodsApi = () => http({ url: '/api/getpubgoods', method: 'post' })
+// 修改发布商品的详情
+export const updategoodsdescApi = (data: Iupdategoodsdesc): any => http({ url: '/api/updategoodsdesc', method: 'post', data })
 // 删除我的发布
 export const delgoodsitemApi = (data: { goods_id: string }): any => http({ url: '/api/delgoodsitem', method: 'post', data })

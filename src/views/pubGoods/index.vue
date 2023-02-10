@@ -1,13 +1,15 @@
 <!-- 发布商品 -->
 <script lang='ts' setup>
-import { reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { showFailToast, showSuccessToast } from 'vant'
 import { useMenusStore } from '@/store/index'
 import router from '@/router';
 
 
-import { pubgoodsAPi } from '@/http/index'
+import { pubgoodsAPi, getgoodskindApi } from '@/http/index'
 import axios from 'axios';
+
+const menusStore = useMenusStore()
 // 数据
 const data = reactive({
     // 商品发布
@@ -20,14 +22,11 @@ const data = reactive({
         cover_img: '',
         cover_list: [] as string[],
     },
+
     // 类型选择器
-    columns: useMenusStore().menus,
-    // columns: useMenusStore().menus1,
-
-
-
-
+    columns: menusStore.menus,
     result: '',
+    goodskingid: '',
     showPicker: false,
     // 图片
     fileTitle: [],
@@ -71,8 +70,9 @@ const validatorOrginPrice = (val: any) => {
 }
 
 // 类型选择器
-const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string }[] }) => {
+const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string, value: string }[] }) => {
     data.result = selectedOptions[0]?.text;
+    data.goodskingid = selectedOptions[0]?.value;
     data.showPicker = false;
 };
 
@@ -88,15 +88,13 @@ async function onSubmit(values: any) {
         goods_present_price: goodsInfo.present_price,
         goods_title_img: data.pub_goods.cover_img,
         goods_contact: goodsInfo.contact,
-        goods_pid: '1',
+        goods_pid: data.goodskingid,
         goods_kind: goodsInfo.kind,
         goods_swiper_img1: data.pub_goods.cover_list[0],
         goods_swiper_img2: data.pub_goods.cover_list[1],
         goods_swiper_img3: data.pub_goods.cover_list[2],
         goods_swiper_img4: data.pub_goods.cover_list[3],
     })
-    console.log(res);
-
 
     if (!res.ok) return showFailToast(res.message)
     router.push({ path: '/userCenter/pubGoods' })
@@ -152,6 +150,14 @@ async function onUploadList(upload_file: any) {
     }
 }
 
+
+onMounted(async () => {
+    // 获取分类菜单
+    let res = await getgoodskindApi()
+    if (!res.ok) showFailToast('系统繁忙')
+    data.columns = res.data
+    menusStore.menus = res.data
+})
 
 
 </script>

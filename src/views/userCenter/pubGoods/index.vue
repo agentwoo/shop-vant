@@ -36,29 +36,35 @@ async function delpubgood(goods_id: string) {
     goodsItemStore.pubGoodsList.splice(index, 1, { ...item, is_delgoods: '1' })
 }
 
+// 跳转详情页
+const toupdategoodsdesc = (goods_id: string) => {
+    router.push({
+        name: 'updategoodsdesc',
+        params: { id: goods_id }
+    })
+}
+
 
 </script>
 
 <template>
     <div class="container">
-        <van-nav-bar title="发布" left-text="返回" left-arrow @click-left="onClickLeft" />
+        <van-nav-bar title="发布" left-text="返回" left-arrow @click-left="onClickLeft" fixed />
         <div v-if="goodsItemStore.undelgoodsList$.length === 0" class="container_empty">
             <van-empty description="暂无发布商品" />
         </div>
-        <div v-else>
+        <div v-else style="margin-top:50px">
             <van-swipe-cell v-for="item in goodsItemStore.undelgoodsList$" :key="item.goods_id" class="container_card">
-                <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img>
-                    <template #footer>
-                        <van-button size="mini" @click="delpubgood(item.goods_id)" v-if="item.goods_status === '1'">
-                            取消发布
-                        </van-button>
-                    </template>
-                    <!-- <template #right>
-                        <van-button square text="删除" type="danger" class="delete-button"
-                            @click="delpubgood(item.goods_id)" />
-                    </template> -->
-                </van-card>
+                <div @click="toupdategoodsdesc(item.goods_id)">
+                    <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
+                        class="goods-card" :thumb=item.goods_title_img>
+                        <template #footer>
+                            <van-button size="mini" @click="delpubgood(item.goods_id)" v-if="item.goods_status === '1'">
+                                取消发布
+                            </van-button>
+                        </template>
+                    </van-card>
+                </div>
             </van-swipe-cell>
         </div>
     </div>

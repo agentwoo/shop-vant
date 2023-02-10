@@ -3,7 +3,6 @@
 import { reactive, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast } from 'vant';
-import { Igoods } from '@/utils/store'
 
 import { getgoodsdescApi, buygoodsitemApi, addcollectgoodsApi } from '@/http/index'
 import { showConfirmDialog } from 'vant';

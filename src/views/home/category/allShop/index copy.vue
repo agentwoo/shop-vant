@@ -1,11 +1,9 @@
 <!-- 13 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref, onMounted } from 'vue'
+import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useMenusStore, useGoodsItemStore } from '@/store/index'
 import GoodsItem from '@/components/goodsItem/index.vue'
-import { getgoodskindApi, getallgoodsListApi } from '@/http/index'
-import { showFailToast } from 'vant';
 
 const menusStore = useMenusStore()
 const goodsItemStore = useGoodsItemStore()
@@ -22,17 +20,6 @@ const handleMenulist = (index: number) => {
     kind.value = String(index + 1)
 }
 
-// 修改
-onMounted(async () => {
-    // 获取分类菜单
-    let res = await getgoodskindApi()
-    if (!res.ok) showFailToast('系统繁忙')
-    menusStore.menus = res.data
-    // 获取所有商品数据
-    let resgoods = await getallgoodsListApi()
-    goodsItemStore.allGoodsList = resgoods.data
-})
-
 </script>
 
 <template>
@@ -42,8 +29,8 @@ onMounted(async () => {
             <!-- 左侧菜单 -->
             <div class="container_menus_list">
                 <van-sidebar v-model="tabValue">
-                    <van-sidebar-item :title=item.text v-for="(item, value) in menusStore.menus" :key="item.kind_id"
-                        @click="handleMenulist(value)" />
+                    <van-sidebar-item :title=item.text v-for="(item, index) in menusStore.menus" :key="index"
+                        @click="handleMenulist(index)" />
                 </van-sidebar>
             </div>
             <!-- 右侧菜单 -->
