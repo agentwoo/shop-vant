@@ -76,29 +76,6 @@ export const useGoodsItemStore = defineStore('goods', () => {
 
 
 // 商品类别
-const kindMenus = [
-    {
-        text: '生活用品', value: '1',
-    },
-    {
-        text: '衣服鞋帽', value: '2',
-    },
-    {
-        text: '运动健身', value: '3',
-    },
-    {
-        text: '电子产品', value: '4',
-    },
-    {
-        text: '零食饮料', value: '5',
-    },
-    {
-        text: '学习用品', value: '6',
-    },
-    {
-        text: '其它', value: '7',
-    },
-]
 export const useMenusStore = defineStore('menus', () => {
     const state = reactive({
         menus: [] as Imenus[],
@@ -111,19 +88,11 @@ export const useMenusStore = defineStore('menus', () => {
 
 
 // 用户详情
-const user = {
-    user_id: '1',
-    user_name: 'zhangsan',
-    password: '123456',
-    user_head_img: 'https://imgsa.baidu.com/forum/pic/item/fb530f3b5bb5c9ea472928e4d839b6003bf3b323.jpg',
-    nickname: 'helloWorld',
-    token: ''
-}
 export const useUserStore = defineStore('user', () => {
     const state = reactive({
-        user: user || {}
+        user: JSON.parse(localStorage.getItem('userInfo') as string) || {},
+        token: JSON.parse(localStorage.getItem('token') as string) || {},
     })
-
     return {
         ...toRefs(state)
     }

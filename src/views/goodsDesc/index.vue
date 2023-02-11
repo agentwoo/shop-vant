@@ -106,7 +106,7 @@ async function addcollectgoods(goods_id: number) {
             <div class="container_goodsDesc_pirce">
                 <span>￥{{ data.item.goods_origin_price }}</span>
                 <span>原价￥{{ data.item.goods_present_price }}</span>
-                <span>发布时间：{{ data.item.goods_pub_time.slice(0, 10) }}</span>
+                <span>上架时间：{{ data.item.goods_pub_time.slice(0, 10) }}</span>
             </div>
             <div class="van-ellipsis">{{ data.item.goods_title }}</div>
             <div class="van-multi-ellipsis--l3">
@@ -146,6 +146,7 @@ async function addcollectgoods(goods_id: number) {
         }
 
         span:nth-child(3) {
+            margin-right: 20px;
             display: flex;
             justify-content: end;
         }

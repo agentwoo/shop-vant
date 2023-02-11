@@ -22,6 +22,8 @@ const data = [
 
 const logout = () => {
     router.replace({ path: '/login' })
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
 }
 
 </script>

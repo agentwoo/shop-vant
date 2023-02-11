@@ -15,8 +15,8 @@ interface Iupdategoodsdesc {
     goods_contact: string,
 }
 
-export const loginApi = (data: Idata): any => http({ url: '/api/my/login', method: 'post', data })
-export const registerApi = (data: Idata): any => http({ url: '/api/my/register', method: 'post', data })
+export const loginApi = (data: Idata): any => http({ url: '/api/login', method: 'post', data })
+export const registerApi = (data: Idata): any => http({ url: '/api/register', method: 'post', data })
 
 
 // 发布商品

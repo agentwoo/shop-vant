@@ -34,16 +34,18 @@ async function login() {
     })
 
     if (res.ok) {
-        router.push('/home')
+        // router.push('/home')
+        router.push('/userCenter')
         showSuccessToast('登录成功')
 
         // 获取用户信息
         useUserStore().user = res.userInfo
 
-
         data.login.username = ''
         data.login.password = ''
-        localStorage.setItem('token', res.token)
+        localStorage.setItem('token', JSON.stringify(res.token))
+        localStorage.setItem('userInfo', JSON.stringify(res.userInfo))
+
     } else {
         showFailToast(res.err)
     }

@@ -44,14 +44,7 @@ const toKind = (path: string) => {
 <template>
     <div class="container">
         <van-nav-bar title='用户中心' fixed />
-
-        <!-- <div class="container_header">
-            <div @click="toLoginOrRegister">
-                <img :src="imgUrl" alt="用户头像">
-                <span class="container_header_span">登录/注册</span>
-            </div>
-        </div> -->
-        <div class="container_header" v-if="userStore.user.token === ''">
+        <div class="container_header" v-if="Object.keys(userStore.user).length === 0">
             <div @click="toLoginOrRegister">
                 <img :src="imgUrl" alt="用户头像">
                 <span class="container_header_span">登录/注册</span>
