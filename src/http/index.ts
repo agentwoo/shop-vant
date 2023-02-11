@@ -1,4 +1,3 @@
-import exp from 'constants'
 import http from './http'
 
 // 登录注册

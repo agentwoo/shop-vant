@@ -77,6 +77,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/userCenter/getGoods/index.vue"),
     },
     {
+        path: "/userCenter/getGoods/pubContact/:id",
+        name: "pubContact",
+        component: () => import("@/views/userCenter/getGoods/pubContact/index.vue"),
+    },
+    {
         path: "/userCenter/sellGoods",
         name: "sellGoods",
         component: () => import("@/views/userCenter/sellGoods/index.vue"),

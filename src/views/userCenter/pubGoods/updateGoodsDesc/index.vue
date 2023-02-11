@@ -84,15 +84,7 @@ async function onSubmit(values: any) {
     })
 
     if (!res.ok) return showFailToast(res.message)
-    // router.push({ path: '' })
     showSuccessToast('修改成功！')
-
-
-    // data.goods_desc.goods_title = '';
-    // data.goods_desc.goods_desc = '';
-    // data.goods_desc.goods_origin_price = '';
-    // data.goods_desc.goods_present_price = '';
-    // data.goods_desc.goods_contact = '';
 }
 
 

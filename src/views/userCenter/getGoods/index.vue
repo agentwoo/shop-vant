@@ -62,6 +62,15 @@ onMounted(async () => {
     goodsItemStore.finishedOrderGoodsList = finishres.data
 })
 
+
+// 跳转获取卖家联系方式
+const topubcontact = (goods_id: number) => {
+    router.push({
+        name: 'pubContact',
+        params: { id: goods_id }
+    })
+}
+
 </script>
 
 <template>
@@ -70,14 +79,17 @@ onMounted(async () => {
         <div v-if="goodsItemStore.tradeordergoods.length !== 0" class="container_order">
             <van-divider>待发货</van-divider>
             <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id" class="container_order_card">
-                <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    :thumb=item.goods_title_img>
-                    <template #footer>
-                        <van-button size="mini" @click="cancelOrder(item.goods_id)" v-if="item.goods_status === '2'">
-                            取消订单
-                        </van-button>
-                    </template>
-                </van-card>
+                <div @click="topubcontact(item.goods_id)">
+                    <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                        :thumb=item.goods_title_img>
+                        <template #footer>
+                            <van-button size="mini" @click="cancelOrder(item.goods_id)"
+                                v-if="item.goods_status === '2'">
+                                取消订单
+                            </van-button>
+                        </template>
+                    </van-card>
+                </div>
             </div>
         </div>
         <div v-if="goodsItemStore.shippedordergoods.length !== 0" class="container_order">
