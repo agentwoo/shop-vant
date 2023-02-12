@@ -22,21 +22,28 @@ export const registerApi = (data: Idata): any => http({ url: '/api/my/register',
 // 发布商品
 export const pubgoodsAPi = (data: any): any => http({ url: '/api/pubgoods', method: 'post', data })
 // 获取轮播图
-export const getswiperApi = () => http({ url: '/api/getswiper', method: 'get' })
+export const getswiperApi = () => http({ url: '/api/my/getswiper', method: 'get' })
+
+
+
 // 获取全部商品
-export const getallgoodsListApi = () => http({ url: '/api/getallgoodsList', method: 'get' })
+export const getallgoodsListApi = () => http({ url: '/api/my/getallgoodsList', method: 'get' })
 // 获取最新商品
-export const getnewgoodsListApi = () => http({ url: '/api/getnewgoodsList', method: 'get' })
+export const getnewgoodsListApi = () => http({ url: '/api/my/getnewgoodsList', method: 'get' })
 // 获取热门商品
-export const gethotgoodsListApi = () => http({ url: '/api/gethotgoodsList', method: 'get' })
+export const gethotgoodsListApi = () => http({ url: '/api/my/gethotgoodsList', method: 'get' })
 // 获取免费商品
-export const getfreegoodsListApi = () => http({ url: '/api/getfreegoodsList', method: 'get' })
+export const getfreegoodsListApi = () => http({ url: '/api/my/getfreegoodsList', method: 'get' })
 // 获取单个商品
-export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: '/api/getgoodsdesc', method: 'post', data })
+export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: '/api/my/getgoodsdesc', method: 'post', data })
+
+
+
+
 
 // 详情页
 // 商品点击量加一
-export const updateviewsApi = (data: { goods_id: string }) => http({ url: '/api/updateviews', method: 'post', data })
+export const updateviewsApi = (data: { goods_id: string }) => http({ url: '/api/my/updateviews', method: 'post', data })
 // 商品购买
 export const buygoodsitemApi = (data: { goods_id: number }): any => http({ url: '/api/buygoodsitem', method: 'post', data })
 
@@ -80,7 +87,7 @@ export const expirecollectgoodsApi = (): any => http({ url: '/api/expirecollectg
 
 
 // 获取商品分类菜单
-export const getgoodskindApi = (): any => http({ url: '/api/getgoodskind', method: 'get' })
+export const getgoodskindApi = (): any => http({ url: '/api/my/getgoodskind', method: 'get' })
 
 
 

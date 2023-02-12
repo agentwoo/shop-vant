@@ -116,7 +116,7 @@ async function onUpload(upload_file: any) {
     upload_file.status = 'uploading'
     const formData = new FormData()
     formData.append('cover_img', upload_file.file)
-    const res = await axios.post('/api/uploadfile', formData, {
+    const res = await axios.post('/api/my/uploadfile', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'charset': 'utf-8',
@@ -124,7 +124,7 @@ async function onUpload(upload_file: any) {
     })
     if (res.data.ok) {
         upload_file.status = 'done'
-        data.pub_goods.cover_img = `http://localhost:3000/api/uploads/goods_pic/${res.data.data}`
+        data.pub_goods.cover_img = `http://localhost:3000/api/my/uploads/goods_pic/${res.data.data}`
     } else {
         upload_file.status = 'failed'
     }
@@ -135,7 +135,7 @@ async function onUploadList(upload_file: any) {
     upload_file.status = 'uploading'
     const formData = new FormData()
     formData.append('cover_img', upload_file.file)
-    const res = await axios.post('/api/uploadfile', formData, {
+    const res = await axios.post('/api/my/uploadfile', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'charset': 'utf-8',
@@ -143,7 +143,7 @@ async function onUploadList(upload_file: any) {
     })
     if (res.data.ok) {
         upload_file.status = 'done'
-        data.pub_goods.cover_list.push(`http://localhost:3000/api/uploads/goods_pic/${res.data.data}`)
+        data.pub_goods.cover_list.push(`http://localhost:3000/api/my/uploads/goods_pic/${res.data.data}`)
 
     } else {
         upload_file.status = 'failed'

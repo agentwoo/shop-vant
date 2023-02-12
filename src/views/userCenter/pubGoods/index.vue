@@ -59,7 +59,8 @@ const toupdategoodsdesc = (goods_id: string) => {
                     <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
                         class="goods-card" :thumb=item.goods_title_img>
                         <template #footer>
-                            <van-button size="mini" @click="delpubgood(item.goods_id)" v-if="item.goods_status === '1'">
+                            <van-button size="mini" @click.stop="delpubgood(item.goods_id)"
+                                v-if="item.goods_status === '1'">
                                 取消发布
                             </van-button>
                         </template>
