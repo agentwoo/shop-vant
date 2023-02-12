@@ -3,8 +3,11 @@
 import { reactive, toRefs, ref, watch } from 'vue'
 import { RouterView, useRoute } from 'vue-router';
 import router from '@/router';
+import { useUserStore } from '@/store/index'
+import { showFailToast } from 'vant';
 
 
+const userStore = useUserStore()
 const active = ref('/home');
 const data = [
     {
@@ -25,6 +28,9 @@ watch(() => route.path, newVal => {
 })
 
 const toNavigate = (path: string) => {
+    if (path === '/pubGoods') {
+        if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    }
     router.push({
         path: path
     })

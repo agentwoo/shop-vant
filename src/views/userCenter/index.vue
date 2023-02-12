@@ -4,6 +4,7 @@ import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import imgUrl from '@/assets/pig.jpeg'
 import { useUserStore } from '@/store/index'
+import { showFailToast } from 'vant';
 
 
 const userStore = useUserStore()
@@ -33,6 +34,7 @@ const data = [
 ]
 
 const toKind = (path: string) => {
+    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
     router.push({
         path: path
     })

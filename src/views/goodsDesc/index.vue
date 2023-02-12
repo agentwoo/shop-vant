@@ -2,12 +2,11 @@
 <script lang='ts' setup>
 import { reactive, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-import { showSuccessToast, showFailToast } from 'vant';
-
+import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { getgoodsdescApi, buygoodsitemApi, addcollectgoodsApi } from '@/http/index'
-import { showConfirmDialog } from 'vant';
+import { useUserStore } from '@/store/index'
 
-
+const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const data = reactive({
@@ -64,6 +63,8 @@ async function getGoodsItem(goods_id: number) {
     }
 }
 const confirmbuygoods = (goods_id: number) => {
+    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    if (data.item.pub_user_id === userStore.user.user_id) return showFailToast('不能购买自己发布的商品')
     showConfirmDialog({
         title: '提示',
         message:
@@ -77,6 +78,9 @@ const confirmbuygoods = (goods_id: number) => {
 
 // 加入收藏
 async function addcollectgoods(goods_id: number) {
+    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    if (data.item.pub_user_id === userStore.user.user_id) return showFailToast('不能收藏自己发布的商品')
+
     let res = await addcollectgoodsApi({ goods_id: goods_id })
     if (res.ok) showFailToast(res.message)
     showSuccessToast(res.message)

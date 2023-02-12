@@ -71,57 +71,75 @@ const topubcontact = (goods_id: number) => {
     })
 }
 
+// tab
+const activeName = ref('a');
+
 </script>
 
 <template>
     <div class="container">
         <van-nav-bar title="订单列表" left-text="返回" fixed left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.tradeordergoods.length !== 0" class="container_order">
-            <van-divider>待发货</van-divider>
-            <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id" class="container_order_card">
-                <div @click="topubcontact(item.goods_id)">
-                    <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                        :thumb=item.goods_title_img>
-                        <template #footer>
-                            <van-button size="mini" @click="cancelOrder(item.goods_id)"
-                                v-if="item.goods_status === '2'">
-                                取消订单
-                            </van-button>
-                        </template>
-                    </van-card>
+        <van-tabs v-model:active="activeName" style="margin-top: 6vh;">
+            <van-tab title="待发货" name="tradeordergoods">
+                <div v-if="goodsItemStore.tradeordergoods.length !== 0" class="container_order">
+                    <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id"
+                        class="container_order_card">
+                        <div @click="topubcontact(item.goods_id)">
+                            <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                                :thumb=item.goods_title_img>
+                                <template #footer>
+                                    <van-button size="mini" @click="cancelOrder(item.goods_id)"
+                                        v-if="item.goods_status === '2'">
+                                        取消订单
+                                    </van-button>
+                                </template>
+                            </van-card>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div v-if="goodsItemStore.shippedordergoods.length !== 0" class="container_order">
-            <van-divider>已发货</van-divider>
-            <div v-for="item in goodsItemStore.shippedordergoods" :key="item.goods_id" class="container_order_card">
-                <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    :thumb=item.goods_title_img>
-                    <template #footer>
-                        <van-button size="mini" @click="confirmOrder(item.goods_id)" v-if="item.goods_status === '3'">
-                            确认收货
-                        </van-button>
-                    </template>
-                </van-card>
-            </div>
-        </div>
-        <div v-if="goodsItemStore.finishedOrderGoodsList.length !== 0" class="container_finishedOrder">
-            <van-divider>历史订单</van-divider>
-            <div v-for="item in goodsItemStore.finishedOrderGoodsList" :key="item.goods_id"
-                class="container_finishedOrder_card">
-                <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    :thumb=item.goods_title_img />
-            </div>
-        </div>
-        <div v-if="goodsItemStore.tradeordergoods.length === 0 && goodsItemStore.finishedOrderGoodsList.length == 0
-        && goodsItemStore.shippedordergoods.length === 0" class="container_empty">
-            <van-empty description="暂无订单" />
-        </div>
+                <div v-else class="empty"><van-empty description="暂无订单" /></div>
+            </van-tab>
+            <van-tab title="已发货" name="shippedordergoods">
+                <div v-if="goodsItemStore.shippedordergoods.length !== 0" class="container_order">
+                    <div v-for="item in goodsItemStore.shippedordergoods" :key="item.goods_id"
+                        class="container_order_card">
+                        <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                            :thumb=item.goods_title_img>
+                            <template #footer>
+                                <van-button size="mini" @click="confirmOrder(item.goods_id)"
+                                    v-if="item.goods_status === '3'">
+                                    确认收货
+                                </van-button>
+                            </template>
+                        </van-card>
+                    </div>
+                </div>
+                <div v-else class="empty"><van-empty description="暂无订单" /></div>
+            </van-tab>
+            <van-tab title="历史订单" name="finishedOrderGoodsList">
+                <div v-if="goodsItemStore.finishedOrderGoodsList.length !== 0" class="container_finishedOrder">
+                    <div v-for="item in goodsItemStore.finishedOrderGoodsList" :key="item.goods_id"
+                        class="container_finishedOrder_card">
+                        <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
+                            :title=item.goods_title :thumb=item.goods_title_img />
+                    </div>
+                </div>
+                <div v-else class="empty"><van-empty description="暂无订单" /></div>
+            </van-tab>
+        </van-tabs>
     </div>
 </template>
 
 <style lang='scss' scoped>
 .container {
+    :deep(.container_order) {
+        margin-top: 0px;
+    }
+
+    .empty {
+        margin-top: 15vh;
+    }
+
     &_order {
         margin-top: 50px;
 
@@ -135,8 +153,6 @@ const topubcontact = (goods_id: number) => {
     }
 
     &_finishedOrder {
-        // margin-top: 10vh;
-
         &_card {
             margin-top: 1vh;
 

@@ -46,60 +46,66 @@ async function sendoutgoods(goods_id: number) {
     showSuccessToast('发货成功！')
 }
 
+const activeName = ref('a');
+
 </script>
 
 <template>
     <div class="container">
         <van-nav-bar title="交易中心" left-text="返回" left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.tradeGoodsList.length === 0
-        && goodsItemStore.shippedGoodsList.length === 0
-        && goodsItemStore.tradefinishedGoodsList.length === 0" class="container_empty">
-            <van-empty description="暂无交易物品" />
-        </div>
-        <div v-if="goodsItemStore.tradeGoodsList.length !== 0">
-            <van-divider>待发货</van-divider>
-            <van-swipe-cell v-for="item in goodsItemStore.tradeGoodsList" :key="item.goods_id" class="container_card">
-                <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img>
-                    <template #footer>
-                        <van-button size="mini" @click="sendoutgoods(item.goods_id)" v-if="item.goods_status === '2'">
-                            确认发货
-                        </van-button>
-                    </template>
-                </van-card>
-            </van-swipe-cell>
-        </div>
-        <div v-if="goodsItemStore.shippedGoodsList.length !== 0">
-            <van-divider>等待买家确认收货</van-divider>
-            <van-swipe-cell v-for="item in goodsItemStore.shippedGoodsList" :key="item.goods_id" class="container_card">
-                <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img>
-                    <template #footer>
-                        <van-button size="mini" v-if="item.goods_status === '3'">
-                            等待买家确认收货
-                        </van-button>
-                    </template>
-                </van-card>
-            </van-swipe-cell>
-        </div>
-        <div v-if="goodsItemStore.tradefinishedGoodsList.length !== 0">
-            <van-divider>交易完成</van-divider>
-            <van-swipe-cell v-for="item in goodsItemStore.tradefinishedGoodsList" :key="item.goods_id"
-                class="container_card">
-                <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                    class="goods-card" :thumb=item.goods_title_img>
-                </van-card>
-            </van-swipe-cell>
-        </div>
+        <van-tabs v-model:active="activeName">
+            <van-tab title="待发货" name="tradeGoodsList">
+                <div v-if="goodsItemStore.tradeGoodsList.length !== 0">
+                    <van-swipe-cell v-for="item in goodsItemStore.tradeGoodsList" :key="item.goods_id"
+                        class="container_card">
+                        <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                            class="goods-card" :thumb=item.goods_title_img>
+                            <template #footer>
+                                <van-button size="mini" @click="sendoutgoods(item.goods_id)"
+                                    v-if="item.goods_status === '2'">
+                                    确认发货
+                                </van-button>
+                            </template>
+                        </van-card>
+                    </van-swipe-cell>
+                </div>
+                <div v-else class="empty"><van-empty description="暂无交易物品" /></div>
+            </van-tab>
+            <van-tab title="等待买家确认收货" name="shippedGoodsList">
+                <div v-if="goodsItemStore.shippedGoodsList.length !== 0">
+                    <van-swipe-cell v-for="item in goodsItemStore.shippedGoodsList" :key="item.goods_id"
+                        class="container_card">
+                        <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc
+                            :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
+                            <template #footer>
+                                <van-button size="mini" v-if="item.goods_status === '3'">
+                                    等待买家确认收货
+                                </van-button>
+                            </template>
+                        </van-card>
+                    </van-swipe-cell>
+                </div>
+                <div v-else class="empty"><van-empty description="暂无交易物品" /></div>
+            </van-tab>
+            <van-tab title="交易完成" name="tradefinishedGoodsList">
+                <div v-if="goodsItemStore.tradefinishedGoodsList.length !== 0">
+                    <van-swipe-cell v-for="item in goodsItemStore.tradefinishedGoodsList" :key="item.goods_id"
+                        class="container_card">
+                        <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
+                            :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
+                        </van-card>
+                    </van-swipe-cell>
+                </div>
+                <div v-else class="empty"><van-empty description="暂无交易物品" /></div>
+            </van-tab>
+        </van-tabs>
     </div>
 </template>
 
 <style lang='scss' scoped>
 .container {
-    &_empty {
-        :deep(.van-empty) {
-            margin-top: 20vh;
-        }
+    .empty {
+        margin-top: 15vh;
     }
 
     &_card {
