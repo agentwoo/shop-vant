@@ -26,6 +26,10 @@ const data = reactive({
         checkpassword: '',
     }
 })
+
+// 获取当前时间戳
+let nowtimestamp = new Date().getTime()
+
 //登录
 async function login() {
     let res = await loginApi({
@@ -34,20 +38,20 @@ async function login() {
     })
 
     if (res.ok) {
-        // router.push('/home')
-        router.push('/userCenter')
-        showSuccessToast('登录成功')
-
         // 获取用户信息
         useUserStore().user = res.userInfo
+        localStorage.setItem('token', JSON.stringify(res.token))
+        localStorage.setItem('userInfo', JSON.stringify(res.userInfo))
+        localStorage.setItem('logintimestamp', JSON.stringify(nowtimestamp))
+
+        router.push('/userCenter')
+        showSuccessToast('登录成功！')
 
         data.login.username = ''
         data.login.password = ''
-        localStorage.setItem('token', JSON.stringify(res.token))
-        localStorage.setItem('userInfo', JSON.stringify(res.userInfo))
 
     } else {
-        showFailToast(res.err)
+        showFailToast('账号或密码错误！')
     }
 }
 

@@ -2,7 +2,10 @@
 <script lang='ts' setup>
 import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/index'
+import { showConfirmDialog, showFailToast, showSuccessToast } from 'vant';
 
+const userStore = useUserStore()
 // navbar
 const router = useRouter()
 const onClickLeft = () => {
@@ -16,15 +19,30 @@ const data = [
         path: '/userCenter/userInfo/updateNickname', icon: 'User', title: '昵称',
     },
     {
-        path: '/userCenter/userInfo/updatePwd', icon: 'Lock', title: '密码',
+        path: '/userCenter/userInfo/updatePwd', icon: 'Lock', title: '修改密码',
     },
 ]
 
 const logout = () => {
-    router.replace({ path: '/login' })
-    localStorage.removeItem('token')
-    localStorage.removeItem('userInfo')
+    showConfirmDialog({
+        title: '提示',
+        message:
+            '确认退出登录?',
+    }).then(() => {
+        router.replace({ path: '/login' })
+        localStorage.removeItem('token')
+        localStorage.removeItem('userInfo')
+        localStorage.removeItem('logintimestamp')
+        userStore.token = ''
+        userStore.user = ''
+        showSuccessToast('退出登录成功！')
+    }).catch(() => {
+
+    });
+
 }
+
+
 
 </script>
 

@@ -15,6 +15,12 @@ const data = reactive({
     searchVal: '',
 })
 
+// 获取当前时间戳
+let nowtimestamp = new Date().getTime()
+let logintimestamp = localStorage.getItem('logintimestamp')
+// token过期时间
+let timeout = 1000 * 60 * 60 * 24
+
 onMounted(async () => {
     // 获取轮播图
     let resswiper = await getswiperApi()
@@ -22,6 +28,15 @@ onMounted(async () => {
     // 获取所有商品数据
     let resgoods = await getallgoodsListApi()
     goodsItemStore.allGoodsList = resgoods.data
+
+    // 如果token过期，则删除本地存储的用户数据
+    if (logintimestamp) {
+        if (nowtimestamp - Number(logintimestamp) >= timeout) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('userInfo')
+            localStorage.removeItem('logintimestamp')
+        }
+    }
 })
 
 
@@ -31,6 +46,9 @@ async function search(searchVal: string) {
         path: '/search'
     })
 }
+
+
+
 
 </script>
 

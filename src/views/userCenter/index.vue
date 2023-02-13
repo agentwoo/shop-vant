@@ -17,9 +17,6 @@ const toLoginOrRegister = () => {
 
 const data = [
     {
-        path: '/userCenter/userInfo', icon: 'contact', title: '个人中心',
-    },
-    {
         path: '/userCenter/getGoods', icon: 'cart-o', title: '我的订单',
     },
     {
@@ -40,6 +37,12 @@ const toKind = (path: string) => {
     })
 }
 
+const toUserInfo = () => {
+    router.push({
+        path: '/userCenter/userInfo'
+    })
+}
+
 
 </script>
 
@@ -53,8 +56,10 @@ const toKind = (path: string) => {
             </div>
         </div>
         <div v-else class="container_header">
-            <img :src="imgUrl" alt="用户头像">
-            <span class="container_header_span">{{ userStore.user.user_name }}</span>
+            <div @click="toUserInfo">
+                <img :src="imgUrl" alt="用户头像">
+                <span class="container_header_span">{{ userStore.user.user_name }}</span>
+            </div>
         </div>
         <van-cell-group inset style="margin-top:2vh">
             <van-cell :title=item.title :icon=item.icon v-for="item in data" :key="item.path"
