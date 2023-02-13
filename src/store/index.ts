@@ -16,8 +16,6 @@ const arr = {
 
 export const useGoodsItemStore = defineStore('goods', () => {
     const state = reactive({
-        searchVal: '',//搜索
-        searchRes: [] as Igoods[],//搜索返回值
         allGoodsList: [] as Igoods[],//全部商品
         newGoodsList: [] as Igoods[],//最新商品
         hotGoodsList: [] as Igoods[],//热门商品

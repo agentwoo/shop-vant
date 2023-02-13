@@ -36,7 +36,9 @@ export const gethotgoodsListApi = () => http({ url: '/api/my/gethotgoodsList', m
 export const getfreegoodsListApi = () => http({ url: '/api/my/getfreegoodsList', method: 'get' })
 // 获取单个商品
 export const getgoodsdescApi = (data: { goods_id: string }): any => http({ url: '/api/my/getgoodsdesc', method: 'post', data })
-
+// 获取搜索页商品
+export const getsearchgoodsListApi = (data: { searchVal: string }): any =>
+    http({ url: `/api/my/getsearchgoodsList?searchVal=${data.searchVal}`, method: 'post', data })
 
 
 

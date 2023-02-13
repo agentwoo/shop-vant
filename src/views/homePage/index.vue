@@ -29,7 +29,7 @@ watch(() => route.path, newVal => {
 
 const toNavigate = (path: string) => {
     if (path === '/pubGoods') {
-        if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+        if (Object.keys(userStore.user).length === 0 && Object.keys(userStore.token).length === 0) return showFailToast('请先登录！')
     }
     router.push({
         path: path

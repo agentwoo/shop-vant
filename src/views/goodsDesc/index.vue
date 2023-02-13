@@ -63,7 +63,7 @@ async function getGoodsItem(goods_id: number) {
     }
 }
 const confirmbuygoods = (goods_id: number) => {
-    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    if (Object.keys(userStore.user).length === 0 && Object.keys(userStore.token).length === 0) return showFailToast('请先登录！')
     if (data.item.pub_user_id === userStore.user.user_id) return showFailToast('不能购买自己发布的商品')
     showConfirmDialog({
         title: '提示',
@@ -78,7 +78,7 @@ const confirmbuygoods = (goods_id: number) => {
 
 // 加入收藏
 async function addcollectgoods(goods_id: number) {
-    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    if (Object.keys(userStore.user).length === 0 && Object.keys(userStore.token).length === 0) return showFailToast('请先登录！')
     if (data.item.pub_user_id === userStore.user.user_id) return showFailToast('不能收藏自己发布的商品')
 
     let res = await addcollectgoodsApi({ goods_id: goods_id })

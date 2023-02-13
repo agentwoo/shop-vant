@@ -34,7 +34,7 @@ const data = [
 ]
 
 const toKind = (path: string) => {
-    if (Object.keys(userStore.user).length === 0) return showFailToast('请先登录！')
+    if (Object.keys(userStore.user).length === 0 && Object.keys(userStore.token).length === 0) return showFailToast('请先登录！')
     router.push({
         path: path
     })
