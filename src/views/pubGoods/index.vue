@@ -57,12 +57,12 @@ async function onSubmit(values: any) {
     let goodsInfo = values
 
     let res = await pubgoodsAPi({
-        goods_title: goodsInfo.goods_title,
-        goods_desc: goodsInfo.goods_desc,
-        goods_origin_price: goodsInfo.origin_price,
-        goods_present_price: goodsInfo.present_price,
+        goods_title: goodsInfo.goods_title.trim(),
+        goods_desc: goodsInfo.goods_desc.trim(),
+        goods_origin_price: goodsInfo.origin_price.trim(),
+        goods_present_price: goodsInfo.present_price.trim(),
         goods_title_img: data.pub_goods.cover_img,
-        goods_contact: goodsInfo.contact,
+        goods_contact: goodsInfo.contact.trim(),
         goods_pid: data.goodskingid,
         goods_kind: goodsInfo.kind,
         goods_swiper_img1: data.pub_goods.cover_list[0],
@@ -144,16 +144,16 @@ onMounted(async () => {
             <van-form @submit="onSubmit">
                 <van-cell-group inset>
                     <van-field v-model="data.pub_goods.goods_title" name="goods_title" placeholder="标题" label="标题"
-                        :maxlength="10" required />
+                        :maxlength="10" :rules="[{ required: true, message: '请填写标题' }]" required />
                     <van-field v-model="data.pub_goods.goods_desc" name="goods_desc" placeholder="详情" label="详情"
-                        :maxlength="20" required />
+                        :maxlength="20" :rules="[{ required: true, message: '请填写详情' }]" required />
                     <van-field v-model="data.pub_goods.origin_price" name="origin_price" type="number" placeholder="原价"
-                        label="原价" :maxlength="5" required />
+                        label="原价" :maxlength="5" :rules="[{ required: true, message: '请填写原价' }]" required />
                     <van-field v-model="data.pub_goods.present_price" name="present_price" type="number"
                         placeholder="现价" label="现价" :maxlength="5" :rules="[{ validator: checkoriginprice }]"
                         required />
                     <van-field v-model="data.pub_goods.contact" name="contact" placeholder="联系方式" label="联系方式"
-                        :maxlength="20" required />
+                        :maxlength="20" :rules="[{ required: true, message: '联系方式不能为空' }]" required />
                     <!-- 分类 -->
                     <van-field v-model="data.result" is-link readonly name="kind" label="分类" placeholder="点击选择商品分类"
                         @click="data.showPicker = true" required />

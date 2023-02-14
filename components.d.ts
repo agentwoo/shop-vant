@@ -12,7 +12,6 @@ declare module '@vue/runtime-core' {
     GoodsItem: typeof import('./src/components/goodsItem/index.vue')['default']
     HeaderTitle: typeof import('./src/components/headerTitle/index.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    'Index copy': typeof import('./src/components/goodsItem/index copy.vue')['default']
     NavBar: typeof import('./src/components/navBar/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
