@@ -16,7 +16,7 @@ const data = [
         path: '/userCenter/userInfo/updateHeaderImg', icon: 'Picture', title: '头像',
     },
     {
-        path: '/userCenter/userInfo/updateNickname', icon: 'User', title: '昵称',
+        path: '/userCenter/userInfo/updateNickname', icon: 'User', title: '用户名',
     },
     {
         path: '/userCenter/userInfo/updatePwd', icon: 'Lock', title: '修改密码',

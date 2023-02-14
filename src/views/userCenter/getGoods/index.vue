@@ -2,17 +2,16 @@
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
-import { showSuccessToast, showFailToast } from 'vant';
+import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { useGoodsItemStore } from '@/store/index'
 import {
     gettradeordergoodsApi,
     getshippedordergoodsApi,
     getfinishordergoodsApi,
     cancelordergoodsApi,
-    confirmordergoodsApi
+    confirmordergoodsApi,
+    delfinishedgoodsApi,
 } from '@/http/index'
-
-
 
 
 const goodsItemStore = useGoodsItemStore()
@@ -24,6 +23,16 @@ const onClickLeft = () => {
     })
 }
 
+async function cancelOrdertip(goods_id: number) {
+    showConfirmDialog({
+        title: '提示',
+        message: '确认取消订单?',
+    }).then(() => {
+        cancelOrder(goods_id)
+    }).catch(() => {
+        showFailToast('取消操作！')
+    });
+}
 // 取消订单
 async function cancelOrder(goods_id: number) {
     let res = await cancelordergoodsApi({ goods_id: goods_id })
@@ -32,7 +41,16 @@ async function cancelOrder(goods_id: number) {
     goodsItemStore.tradeordergoods.splice(index, 1)
 }
 
-
+async function confirmOrdertip(goods_id: number) {
+    showConfirmDialog({
+        title: '提示',
+        message: '确认收到货?',
+    }).then(() => {
+        confirmOrder(goods_id)
+    }).catch(() => {
+        showFailToast('取消操作！')
+    });
+}
 
 // 确认收货
 async function confirmOrder(goods_id: number) {
@@ -74,6 +92,18 @@ const topubcontact = (goods_id: number) => {
 // tab
 const activeName = ref('a');
 
+// 删除已完成的订单商品
+async function finishedOrder(order_id: number) {
+    let res = await delfinishedgoodsApi({ order_id: order_id })
+    if (!res.ok) showFailToast('系统繁忙！')
+
+    // 删除本地数据
+    let index = goodsItemStore.finishedOrderGoodsList.findIndex(v => v.order_id === order_id)
+    if (index === -1) showFailToast('系统繁忙！')
+    goodsItemStore.finishedOrderGoodsList.splice(index, 1)
+    showSuccessToast('删除成功！')
+}
+
 </script>
 
 <template>
@@ -88,8 +118,7 @@ const activeName = ref('a');
                             <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                                 :thumb=item.goods_title_img>
                                 <template #footer>
-                                    <van-button size="mini" @click="cancelOrder(item.goods_id)"
-                                        v-if="item.goods_status === '2'">
+                                    <van-button size="mini" @click.stop="cancelOrdertip(item.goods_id)">
                                         取消订单
                                     </van-button>
                                 </template>
@@ -106,8 +135,7 @@ const activeName = ref('a');
                         <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                             :thumb=item.goods_title_img>
                             <template #footer>
-                                <van-button size="mini" @click="confirmOrder(item.goods_id)"
-                                    v-if="item.goods_status === '3'">
+                                <van-button size="mini" @click="confirmOrdertip(item.goods_id)">
                                     确认收货
                                 </van-button>
                             </template>
@@ -120,8 +148,14 @@ const activeName = ref('a');
                 <div v-if="goodsItemStore.finishedOrderGoodsList.length !== 0" class="container_finishedOrder">
                     <div v-for="item in goodsItemStore.finishedOrderGoodsList" :key="item.goods_id"
                         class="container_finishedOrder_card">
-                        <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
-                            :title=item.goods_title :thumb=item.goods_title_img />
+                        <van-swipe-cell class="container_card">
+                            <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
+                                :title=item.goods_title :thumb=item.goods_title_img />
+                            <template #right>
+                                <van-button square text="删除" type="danger" @click.stop="finishedOrder(item.order_id)"
+                                    class="delete-button" />
+                            </template>
+                        </van-swipe-cell>
                     </div>
                 </div>
                 <div v-else class="empty"><van-empty description="暂无订单" /></div>

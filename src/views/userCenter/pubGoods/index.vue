@@ -4,7 +4,7 @@ import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useGoodsItemStore } from '@/store/index'
 import { getpubgoodsApi, delgoodsitemApi } from '@/http/index'
-import { showFailToast, showSuccessToast } from 'vant';
+import { showFailToast, showSuccessToast, showConfirmDialog } from 'vant';
 
 const goodsItemStore = useGoodsItemStore()
 // navbar
@@ -18,6 +18,18 @@ onMounted(async () => {
     let res = await getpubgoodsApi()
     goodsItemStore.pubGoodsList = res.data
 })
+
+// 提示框
+async function deltip(goods_id: string) {
+    showConfirmDialog({
+        title: '提示',
+        message: '确认下架商品?',
+    }).then(() => {
+        delpubgood(goods_id)
+    }).catch(() => {
+        showFailToast('取消！')
+    });
+}
 
 // 删除发布的商品
 async function delpubgood(goods_id: string) {
@@ -59,9 +71,9 @@ const toupdategoodsdesc = (goods_id: string) => {
                     <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
                         class="goods-card" :thumb=item.goods_title_img>
                         <template #footer>
-                            <van-button size="mini" @click.stop="delpubgood(item.goods_id)"
+                            <van-button size="mini" @click.stop="deltip(item.goods_id)"
                                 v-if="item.goods_status === '1'">
-                                取消发布
+                                下架商品
                             </van-button>
                         </template>
                     </van-card>

@@ -2,11 +2,15 @@
 <script lang='ts' setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
+import { showFailToast, showSuccessToast, showConfirmDialog } from 'vant';
 import { useGoodsItemStore } from '@/store/index'
-// import { delgoodsitemApi, getpubgoodsApi } from '@/http/index'
-import { gettradegoodsApi, getshippedgoodsApi, gettradefinishedgoodsApi, confirmsendgoodsApi } from '@/http/index'
-
-import { showFailToast, showSuccessToast } from 'vant';
+import {
+    gettradegoodsApi,
+    getshippedgoodsApi,
+    gettradefinishedgoodsApi,
+    confirmsendgoodsApi,
+    deltradefinishedgoodsAPi
+} from '@/http/index'
 
 
 const goodsItemStore = useGoodsItemStore()
@@ -31,6 +35,17 @@ onMounted(async () => {
     goodsItemStore.tradefinishedGoodsList = restradefinishedgoods.data
 })
 
+async function sendoutgoodstip(goods_id: number) {
+    showConfirmDialog({
+        title: '提示',
+        message: '确认发货?',
+    }).then(() => {
+        sendoutgoods(goods_id)
+    }).catch(() => {
+        showFailToast('取消操作！')
+    });
+}
+
 
 // 确认发货
 async function sendoutgoods(goods_id: number) {
@@ -45,6 +60,19 @@ async function sendoutgoods(goods_id: number) {
     goodsItemStore.shippedGoodsList.push(item)
     showSuccessToast('发货成功！')
 }
+
+
+// 删除已完成的交易数据
+async function deltradefinishedgoods(goods_id: number) {
+    let res = deltradefinishedgoodsAPi({ goods_id: goods_id })
+    if (!res.ok) showFailToast(res.message)
+
+    // 删除store中的数据
+    let index = goodsItemStore.tradefinishedGoodsList.findIndex(v => v.goods_id === goods_id)
+    goodsItemStore.tradefinishedGoodsList.splice(index, 1)
+    showSuccessToast('删除成功！')
+}
+
 
 const activeName = ref('a');
 
@@ -61,7 +89,7 @@ const activeName = ref('a');
                         <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                             class="goods-card" :thumb=item.goods_title_img>
                             <template #footer>
-                                <van-button size="mini" @click="sendoutgoods(item.goods_id)"
+                                <van-button size="mini" @click="sendoutgoodstip(item.goods_id)"
                                     v-if="item.goods_status === '2'">
                                     确认发货
                                 </van-button>
@@ -94,6 +122,10 @@ const activeName = ref('a');
                         <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
                             :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
                         </van-card>
+                        <template #right>
+                            <van-button square text="删除" type="danger"
+                                @click.stop="deltradefinishedgoods(item.goods_id)" class="delete-button" />
+                        </template>
                     </van-swipe-cell>
                 </div>
                 <div v-else class="empty"><van-empty description="暂无交易物品" /></div>

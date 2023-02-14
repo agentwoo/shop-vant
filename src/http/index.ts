@@ -17,6 +17,16 @@ interface Iupdategoodsdesc {
 
 export const loginApi = (data: Idata): any => http({ url: '/api/my/login', method: 'post', data })
 export const registerApi = (data: Idata): any => http({ url: '/api/my/register', method: 'post', data })
+// 修改密码
+export const updatepasswodApi = (data: { user_name: string, password: string }): any =>
+    http({ url: '/api/my/updatepasswod', method: 'post', data })
+// 修改头像
+export const updateuserImgApi = (data: { user_img: string, user_name: string }): any =>
+    http({ url: '/api/my/updateuserImg', method: 'post', data })
+// 修改用户名
+export const updateuserNameApi = (data: { user_name: string, user_id: number }): any =>
+    http({ url: '/api/my/updateuserName', method: 'post', data })
+
 
 
 // 发布商品
@@ -59,6 +69,8 @@ export const getshippedordergoodsApi = (): any => http({ url: '/api/getshippedgo
 
 // 获取已完成商品订单
 export const getfinishordergoodsApi = (): any => http({ url: '/api/getfinishordergoods', method: 'post' })
+// 删除已完成的商品订单
+export const delfinishedgoodsApi = (data: { order_id: number }): any => http({ url: '/api/delfinishedgoods', method: 'post', data })
 // 取消订单
 export const cancelordergoodsApi = (data: { goods_id: number }): any => http({ url: '/api/cancelordergoods', method: 'post', data })
 // 确认收货
@@ -74,6 +86,9 @@ export const gettradegoodsApi = (): any => http({ url: '/api/tradegoods', method
 export const getshippedgoodsApi = (): any => http({ url: '/api/shippedgoods', method: 'post' })
 //获取交易完成的商品列表
 export const gettradefinishedgoodsApi = (): any => http({ url: '/api/tradefinishedgoods', method: 'post' })
+// 删除交易完成的商品
+export const deltradefinishedgoodsAPi = (data: { goods_id: number }): any =>
+    http({ url: '/api/deltradefinishedgoods', method: 'post', data })
 
 
 

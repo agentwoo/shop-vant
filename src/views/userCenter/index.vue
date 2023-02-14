@@ -52,13 +52,13 @@ const toUserInfo = () => {
         <div class="container_header" v-if="Object.keys(userStore.user).length === 0">
             <div @click="toLoginOrRegister">
                 <img :src="imgUrl" alt="用户头像">
-                <span class="container_header_span">登录/注册</span>
+                <div class="container_header_div">登录/注册</div>
             </div>
         </div>
         <div v-else class="container_header">
             <div @click="toUserInfo">
-                <img :src="imgUrl" alt="用户头像">
-                <span class="container_header_span">{{ userStore.user.user_name }}</span>
+                <img :src="userStore.user.user_img" alt="用户头像">
+                <div class="container_header_div">{{ userStore.user.user_name }}</div>
             </div>
         </div>
         <van-cell-group inset style="margin-top:2vh">
@@ -77,21 +77,17 @@ const toUserInfo = () => {
 
     &_header {
         height: 30vh;
-        line-height: 30vh;
         background-color: #68A1D9;
         text-align: center;
 
-
         img {
             height: 60px;
+            width: 60px;
             border-radius: 50%;
             margin-top: 10vh;
         }
 
-        &_span {
-            position: absolute;
-            top: 6vh;
-            left: 41.2vw;
+        &_div {
             color: white;
         }
     }

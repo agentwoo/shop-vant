@@ -35,40 +35,15 @@ const data = reactive({
 })
 
 // 验证规则
-const validatorTitle = (val: any) => {
-    if (val.length !== 0) {
-        if (val.length > 8) {
-            return '请输入7个以内的字符'
-        } else {
-            return true
-        }
-    } else {
+const checkoriginprice = (value: string) => {
+    if (!value.trim()) {
         return '不能为空'
+    } else if (Number(value.trim()) - Number(data.pub_goods.origin_price) >= 0) {
+        return '现价不能超过或等于原价'
+    } else {
+        return true
     }
 }
-const validatorDesc = (val: any) => {
-    if (val.length !== 0) {
-        if (val.length > 21) {
-            return '请输入20个以内的字符'
-        } else {
-            return true
-        }
-    } else {
-        return '不能为空'
-    }
-}
-const validatorOrginPrice = (val: any) => {
-    if (val.length !== 0) {
-        if (val.length > 4) {
-            return '请输入5个以内的字符'
-        } else {
-            return true
-        }
-    } else {
-        return '不能为空'
-    }
-}
-
 // 类型选择器
 const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string, value: string }[] }) => {
     data.result = selectedOptions[0]?.text;
@@ -169,31 +144,35 @@ onMounted(async () => {
             <van-form @submit="onSubmit">
                 <van-cell-group inset>
                     <van-field v-model="data.pub_goods.goods_title" name="goods_title" placeholder="标题" label="标题"
-                        :rules="[{ validator: validatorTitle }]" required />
+                        :maxlength="10" required />
                     <van-field v-model="data.pub_goods.goods_desc" name="goods_desc" placeholder="详情" label="详情"
-                        :rules="[{ validator: validatorDesc }]" required />
+                        :maxlength="20" required />
                     <van-field v-model="data.pub_goods.origin_price" name="origin_price" type="number" placeholder="原价"
-                        label="原价" :rules="[{ validator: validatorOrginPrice }]" required />
+                        label="原价" :maxlength="5" required />
                     <van-field v-model="data.pub_goods.present_price" name="present_price" type="number"
-                        placeholder="现价" label="现价" :rules="[{ validator: validatorOrginPrice }]" required />
+                        placeholder="现价" label="现价" :maxlength="5" :rules="[{ validator: checkoriginprice }]"
+                        required />
                     <van-field v-model="data.pub_goods.contact" name="contact" placeholder="联系方式" label="联系方式"
-                        :rules="[{ validator: validatorDesc }]" required />
+                        :maxlength="20" required />
                     <!-- 分类 -->
                     <van-field v-model="data.result" is-link readonly name="kind" label="分类" placeholder="点击选择商品分类"
                         @click="data.showPicker = true" required />
                     <van-popup v-model:show="data.showPicker" position="bottom">
-                        <van-picker :columns="data.columns" @confirm="onConfirm" @cancel="data.showPicker = false" />
+                        <van-picker :columns="data.columns" @confirm="onConfirm" @cancel="data.showPicker = false"
+                            :deletable="false" />
                     </van-popup>
                     <!-- 图片 -->
                     <van-field name="uploader" label="封面图" required>
                         <template #input>
-                            <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload" />
+                            <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
+                                :deletable="false" />
                         </template>
                     </van-field>
                     <!-- 详情图 -->
                     <van-field name="uploader" label="详情图" required>
                         <template #input>
-                            <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList" />
+                            <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList"
+                                :deletable="false" />
                         </template>
                     </van-field>
                 </van-cell-group>

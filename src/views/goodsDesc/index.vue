@@ -50,8 +50,6 @@ const onClickLeft = () => {
     router.back()
 }
 
-
-
 // 购买商品
 async function getGoodsItem(goods_id: number) {
     let res = await buygoodsitemApi({ goods_id: goods_id })
@@ -118,9 +116,8 @@ async function addcollectgoods(goods_id: number) {
             </div>
         </div>
         <van-action-bar>
-            <!-- <van-action-bar-icon icon="star" text="已收藏" color="#ff5000" /> -->
             <van-action-bar-button type="danger" text="加入收藏" @click="addcollectgoods(data.item.goods_id)" />
-            <van-action-bar-button type="danger" text="预约购买" @click="confirmbuygoods(data.item.goods_id)" />
+            <van-action-bar-button type="danger" text="购买" @click="confirmbuygoods(data.item.goods_id)" />
         </van-action-bar>
     </div>
 </template>
