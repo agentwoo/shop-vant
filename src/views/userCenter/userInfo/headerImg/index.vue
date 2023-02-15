@@ -62,7 +62,7 @@ async function updateuserImg() {
     localStorage.setItem('userInfo', JSON.stringify(user_info))
     // 更改store中的数据
     userStore.user.user_img = data.user_img
-    showSuccessToast('更新成功！')
+    // showSuccessToast('更新成功！')
 }
 
 </script>

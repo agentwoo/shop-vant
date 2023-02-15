@@ -74,10 +74,10 @@ const onClickLeft = () => {
             </div>
             <div class="van-ellipsis">{{ data.item.goods_title }}</div>
             <div class="van-multi-ellipsis--l3">
-                {{ data.item.goods_desc }}
+                商品详情： {{ data.item.goods_desc }}
             </div>
             <div class="van-multi-ellipsis--l3">
-                {{ data.item.goods_contact }}
+                联系方式：{{ data.item.goods_contact }}
             </div>
         </div>
     </div>

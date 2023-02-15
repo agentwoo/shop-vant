@@ -81,7 +81,10 @@ onMounted(async () => {
             position: absolute;
             top: 46px;
             left: 80px;
+            overflow: hidden;
             overflow-y: scroll;
+            height: calc(100% - 46px);
+
 
             display: flex;
             flex-wrap: wrap;

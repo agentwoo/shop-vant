@@ -1,6 +1,6 @@
 <!-- 发布商品 -->
 <script lang='ts' setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { showFailToast, showSuccessToast } from 'vant'
 import { useMenusStore } from '@/store/index'
 import router from '@/router';
@@ -44,6 +44,16 @@ const checkoriginprice = (value: string) => {
         return true
     }
 }
+
+// 限制图片必须要4张
+const fileList = (value: any) => {
+    if (value.length !== 4) {
+        return '请上传4张详情图'
+    } else {
+        return true
+    }
+}
+
 // 类型选择器
 const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string, value: string }[] }) => {
     data.result = selectedOptions[0]?.text;
@@ -51,11 +61,9 @@ const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string, value
     data.showPicker = false;
 };
 
-
 // 表单提交
 async function onSubmit(values: any) {
     let goodsInfo = values
-
     let res = await pubgoodsAPi({
         goods_title: goodsInfo.goods_title.trim(),
         goods_desc: goodsInfo.goods_desc.trim(),
@@ -73,7 +81,6 @@ async function onSubmit(values: any) {
 
     if (!res.ok) return showFailToast(res.message)
     router.push({ path: '/userCenter/pubGoods' })
-    showSuccessToast('发布成功！')
 
 
     data.pub_goods.goods_title = '';
@@ -141,7 +148,7 @@ onMounted(async () => {
     <div class="container">
         <van-nav-bar title='商品发布' fixed />
         <div class="container_form">
-            <van-form @submit="onSubmit">
+            <van-form @submit="onSubmit" ref="formRef">
                 <van-cell-group inset>
                     <van-field v-model="data.pub_goods.goods_title" name="goods_title" placeholder="标题" label="标题"
                         :maxlength="10" :rules="[{ required: true, message: '请填写标题' }]" required />
@@ -162,14 +169,14 @@ onMounted(async () => {
                             :deletable="false" />
                     </van-popup>
                     <!-- 图片 -->
-                    <van-field name="uploader" label="封面图" required>
+                    <van-field name="uploader" label="封面图" required :rules="[{ required: true, message: '请上传封面' }]">
                         <template #input>
                             <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
                                 :deletable="false" />
                         </template>
                     </van-field>
                     <!-- 详情图 -->
-                    <van-field name="uploader" label="详情图" required>
+                    <van-field name="uploader" label="详情图" required :rules="[{ validator: fileList }]">
                         <template #input>
                             <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList"
                                 :deletable="false" />

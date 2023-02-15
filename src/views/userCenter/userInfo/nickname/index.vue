@@ -15,15 +15,18 @@ const onClickLeft = () => {
 const userStore = useUserStore()
 // 修改昵称
 const data = reactive({
+    old_user_name: userStore.user.user_name,
+
     user_name: userStore.user.user_name,
     user_id: userStore.user.user_id
 })
 
+let formRef = ref()
 // 修改用户名验证规则
 const checknickname = (val: any) => {
     if (!val.trim()) {
         return '请填写更改的用户名'
-    } else if (val.trim() === data.user_name) {
+    } else if (val.trim() === data.old_user_name) {
         return '不允许提交原用户名'
     } else {
         return true
@@ -31,6 +34,12 @@ const checknickname = (val: any) => {
 }
 
 async function onSubmit() {
+    const $form = formRef.value
+    if (!$form) return
+    const valid = await $form.validate()
+    // if (!valid) return
+
+
     let res = await updateuserNameApi({ user_name: data.user_name.trim(), user_id: data.user_id })
     if (!res.ok) showFailToast(res.message)
     // 修改本地信息
@@ -61,9 +70,9 @@ const onsubmit = () => {
     <div class="container">
         <van-nav-bar title="更改昵称" left-text="返回" left-arrow @click-left="onClickLeft" />
         <div class="container_form">
-            <van-form @submit="onSubmit">
+            <van-form @submit="onSubmit" ref="formRef">
                 <van-field v-model="data.user_name" name="user_name" label="用户名" placeholder="用户名"
-                    :rules="[{ validator: checknickname }]" :maxlength="7" />
+                    :rules="[{ validator: checknickname }]" :maxlength="10" />
                 <div style="margin: 16px;">
                     <van-button round block type="primary" @click="onsubmit">
                         修改昵称

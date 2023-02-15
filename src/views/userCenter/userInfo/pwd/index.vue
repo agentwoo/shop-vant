@@ -42,7 +42,7 @@ const userStore = useUserStore()
 let nowtimestamp = new Date().getTime()
 async function onSubmit(values: Idata) {
     let user_name = userStore.user.user_name
-    let res = await updatepasswodApi({ user_name: user_name, password: values.newpassword })
+    let res = await updatepasswodApi({ user_name: user_name.trim(), password: values.newpassword.trim() })
     if (!res.ok) showFailToast(res.message)
 
 
