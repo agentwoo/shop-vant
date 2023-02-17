@@ -32,8 +32,7 @@ export const updateuserNameApi = (data: { user_name: string, user_id: number }):
 // 发布商品
 export const pubgoodsAPi = (data: any): any => http({ url: '/api/pubgoods', method: 'post', data })
 // 获取轮播图
-export const getswiperApi = () => http({ url: '/api/my/getswiper', method: 'get' })
-
+export const getswiperApi = (): any => http({ url: '/api/my/getswiper', method: 'get' })
 
 
 // 获取全部商品

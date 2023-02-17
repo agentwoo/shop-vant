@@ -6,13 +6,15 @@ import router from '@/router';
 import Category from '@/views/home/category/index.vue'
 import GoodsItem from '@/components/goodsItem/index.vue'
 import { useGoodsItemStore } from '@/store/index'
-import { getswiperApi, getallgoodsListApi, } from '@/http/index'
+import { getallgoodsListApi, getswiperApi } from '@/http/index'
 
+
+import { Iswiper } from '@/utils/store'
 
 const goodsItemStore = useGoodsItemStore()
 const data = reactive({
-    images: [] as string[],
     searchVal: '',
+    swiper: [] as Iswiper[],
 })
 
 // 获取当前时间戳
@@ -23,8 +25,11 @@ let timeout = 1000 * 60 * 60 * 24
 
 onMounted(async () => {
     // 获取轮播图
-    let resswiper = await getswiperApi()
-    data.images = resswiper.data[0]
+    let res = await getswiperApi()
+    if (!res.ok) return res.cc(res.message)
+    data.swiper = res.data
+
+
     // 获取所有商品数据
     let resgoods = await getallgoodsListApi()
     goodsItemStore.allGoodsList = resgoods.data
@@ -60,8 +65,8 @@ async function search(searchVal: string) {
         </div>
         <div class="container_swiper">
             <van-swipe :autoplay="3000" lazy-render style="height:200px">
-                <van-swipe-item v-for="image in data.images" :key="image">
-                    <img :src="image" style="width: 100%;" />
+                <van-swipe-item v-for="item in data.swiper" :key="item.swiper_id">
+                    <img :src="item.swiper_url" style="width: 100%;" />
                 </van-swipe-item>
             </van-swipe>
         </div>

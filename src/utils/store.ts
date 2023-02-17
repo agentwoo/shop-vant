@@ -100,3 +100,11 @@ export interface Icollect {
     goods_desc: string,
     is_delgoods: string,
 }
+
+
+
+// 轮播图相关配置
+export interface Iswiper {
+    swiper_id: string,
+    swiper_url: string,
+}
