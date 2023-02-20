@@ -110,6 +110,8 @@ export const getgoodskindApi = (): any => http({ url: '/api/my/getgoodskind', me
 // 我的发布
 // 获取我发布的商品
 export const getpubgoodsApi = () => http({ url: '/api/getpubgoods', method: 'post' })
+// 获取下架的商品
+export const getremovegoodsApi = () => http({ url: '/api/getremovegoods', method: 'post' })
 // 修改发布商品的详情
 export const updategoodsdescApi = (data: Iupdategoodsdesc): any => http({ url: '/api/updategoodsdesc', method: 'post', data })
 // 删除我的发布

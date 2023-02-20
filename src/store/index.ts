@@ -33,6 +33,7 @@ export const useGoodsItemStore = defineStore('goods', () => {
         expirecollectgoods: [] as Icollect[], //失效的收藏列表
 
         pubGoodsList: [] as pubgood[],//发布商品列表
+        removeGoodsList: [] as pubgood[],//下架的商品
     })
 
     // 查找事项

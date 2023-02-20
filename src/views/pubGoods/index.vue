@@ -81,6 +81,7 @@ async function onSubmit(values: any) {
 
     if (!res.ok) return showFailToast(res.message)
     router.push({ path: '/userCenter/pubGoods' })
+    showSuccessToast('发布成功！')
 
 
     data.pub_goods.goods_title = '';
@@ -156,9 +157,8 @@ onMounted(async () => {
                         :maxlength="20" :rules="[{ required: true, message: '请填写详情' }]" required />
                     <van-field v-model="data.pub_goods.origin_price" name="origin_price" type="number" placeholder="原价"
                         label="原价" :maxlength="5" :rules="[{ required: true, message: '请填写原价' }]" required />
-                    <van-field v-model="data.pub_goods.present_price" name="present_price" type="number"
-                        placeholder="现价" label="现价" :maxlength="5" :rules="[{ validator: checkoriginprice }]"
-                        required />
+                    <van-field v-model="data.pub_goods.present_price" name="present_price" type="number" placeholder="现价"
+                        label="现价" :maxlength="5" :rules="[{ validator: checkoriginprice }]" required />
                     <van-field v-model="data.pub_goods.contact" name="contact" placeholder="联系方式" label="联系方式"
                         :maxlength="20" :rules="[{ required: true, message: '联系方式不能为空' }]" required />
                     <!-- 分类 -->

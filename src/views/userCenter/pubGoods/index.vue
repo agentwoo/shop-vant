@@ -3,7 +3,7 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useGoodsItemStore } from '@/store/index'
-import { getpubgoodsApi, delgoodsitemApi } from '@/http/index'
+import { getpubgoodsApi, delgoodsitemApi, getremovegoodsApi } from '@/http/index'
 import { showFailToast, showSuccessToast, showConfirmDialog } from 'vant';
 
 const goodsItemStore = useGoodsItemStore()
@@ -17,7 +17,12 @@ const onClickLeft = () => {
 onMounted(async () => {
     let res = await getpubgoodsApi()
     goodsItemStore.pubGoodsList = res.data
+
+    let resremove = await getremovegoodsApi()
+    goodsItemStore.removeGoodsList = resremove.data
 })
+
+
 
 // 提示框
 async function deltip(goods_id: string) {
@@ -62,22 +67,31 @@ const toupdategoodsdesc = (goods_id: string) => {
 <template>
     <div class="container">
         <van-nav-bar title="发布" left-text="返回" left-arrow @click-left="onClickLeft" fixed />
-        <div v-if="goodsItemStore.undelgoodsList$.length === 0" class="container_empty">
+        <div v-if="goodsItemStore.undelgoodsList$.length === 0 && goodsItemStore.removeGoodsList.length === 0"
+            class="container_empty">
             <van-empty description="暂无发布商品" />
         </div>
-        <div v-else style="margin-top:50px">
+        <!-- 获取发布中的商品 -->
+        <div v-if="goodsItemStore.undelgoodsList$.length !== 0" style="margin-top:50px">
             <van-swipe-cell v-for="item in goodsItemStore.undelgoodsList$" :key="item.goods_id" class="container_card">
                 <div @click="toupdategoodsdesc(item.goods_id)">
                     <van-card :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
                         class="goods-card" :thumb=item.goods_title_img>
                         <template #footer>
-                            <van-button size="mini" @click.stop="deltip(item.goods_id)"
-                                v-if="item.goods_status === '1'">
+                            <van-button size="mini" @click.stop="deltip(item.goods_id)" v-if="item.goods_status === '1'">
                                 下架商品
                             </van-button>
                         </template>
                     </van-card>
                 </div>
+            </van-swipe-cell>
+        </div>
+        <!-- 获取已下架的商品 -->
+        <div v-if="goodsItemStore.removeGoodsList.length !== 0" style="margin-top:50px">
+            <van-swipe-cell v-for="item in goodsItemStore.removeGoodsList" :key="item.goods_id" class="container_card">
+                <van-card tag="已下架" :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
+                    class="goods-card" :thumb=item.goods_title_img>
+                </van-card>
             </van-swipe-cell>
         </div>
     </div>

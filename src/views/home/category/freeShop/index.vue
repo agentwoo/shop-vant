@@ -31,7 +31,9 @@ onMounted(async () => {
         <div v-else class="container_content">
             <GoodsItem :goodsItemDesc="goodsItemStore.freeGoodsList"></GoodsItem>
         </div>
-        <van-divider>没有更多了</van-divider>
+        <div v-if="goodsItemStore.freeGoodsList.length !== 0">
+            <van-divider>没有更多了</van-divider>
+        </div>
     </div>
 </template>
 
