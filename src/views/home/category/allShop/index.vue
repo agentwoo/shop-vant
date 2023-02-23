@@ -83,7 +83,6 @@ onMounted(async () => {
             left: 80px;
             overflow: hidden;
             overflow-y: scroll;
-            height: calc(100% - 46px);
 
 
             display: flex;
@@ -96,8 +95,9 @@ onMounted(async () => {
             }
 
             :deep(.van-image__img) {
-                width: 80%;
-                object-fit: contain;
+                width: 78%;
+                border-radius: 20px;
+                // object-fit: contain;
             }
 
         }

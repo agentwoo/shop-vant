@@ -4,7 +4,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { showFailToast, showSuccessToast } from 'vant'
 import { useMenusStore } from '@/store/index'
 import router from '@/router';
-
+import 'vant/es/toast/style';
 
 import { pubgoodsAPi, getgoodskindApi } from '@/http/index'
 import axios from 'axios';
@@ -60,6 +60,32 @@ const onConfirm = ({ selectedOptions }: { selectedOptions: { text: string, value
     data.goodskingid = selectedOptions[0]?.value;
     data.showPicker = false;
 };
+
+// 限制图片的大小及后缀名
+const beforeRead = (file: any) => {
+    if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
+        if (file.size / 1024 / 1024 > 10) {
+            showFailToast('图片大小不能超过10mb');
+            return false
+        }
+    } else {
+        showFailToast('图片格式必须是jpg/jepg/png');
+        return false
+    }
+    return true
+};
+
+// 删除封面图预览
+const delCoverImg = () => {
+    data.pub_goods.cover_img = ''
+    return true
+}
+
+// 删除详情页的页面预览
+const delCoverListImg = (file: any, detail: any) => {
+    data.pub_goods.cover_list.splice(detail.index, 1)
+    return true
+}
 
 // 表单提交
 async function onSubmit(values: any) {
@@ -172,14 +198,14 @@ onMounted(async () => {
                     <van-field name="uploader" label="封面图" required :rules="[{ required: true, message: '请上传封面' }]">
                         <template #input>
                             <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
-                                :deletable="false" />
+                                :before-delete="delCoverImg" :before-read='beforeRead' />
                         </template>
                     </van-field>
                     <!-- 详情图 -->
                     <van-field name="uploader" label="详情图" required :rules="[{ validator: fileList }]">
                         <template #input>
                             <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList"
-                                :deletable="false" />
+                                :before-delete="delCoverListImg" />
                         </template>
                     </van-field>
                 </van-cell-group>

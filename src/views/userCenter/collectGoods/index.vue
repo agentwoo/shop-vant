@@ -46,12 +46,12 @@ async function delcollectgoods(collect_id: number) {
 onMounted(async () => {
     // 获取收藏商品列表
     let res = await getcollectgoodsApi()
-    if (!res.ok) showFailToast('系统繁忙！')
+    if (!res.ok) return showFailToast(res.message)
     goodsItemStore.collectGoodsList = res.data
 
     // 获取失效的商品列表
     let resexpire = await expirecollectgoodsApi()
-    if (!resexpire.ok) showFailToast('系统繁忙！')
+    if (!resexpire.ok) return showFailToast(res.message)
     goodsItemStore.expirecollectgoods = resexpire.data
 })
 
@@ -63,8 +63,7 @@ onMounted(async () => {
     <div class="container">
         <van-nav-bar title="我的收藏" left-text="返回" fixed left-arrow @click-left="onClickLeft" />
         <div v-if="goodsItemStore.collectGoodsList.length !== 0" class="container_content">
-            <div v-for="item in goodsItemStore.collectGoodsList" :key="item.goods_id"
-                @click="toGoodsDesc(item.goods_id)">
+            <div v-for="item in goodsItemStore.collectGoodsList" :key="item.goods_id" @click="toGoodsDesc(item.goods_id)">
                 <van-swipe-cell class="container_card">
                     <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                         class="goods-card" :thumb=item.goods_title_img />

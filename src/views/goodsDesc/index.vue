@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { getgoodsdescApi, buygoodsitemApi, addcollectgoodsApi } from '@/http/index'
 import { useUserStore } from '@/store/index'
+import 'vant/es/toast/style';
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -53,6 +54,7 @@ const onClickLeft = () => {
 // 购买商品
 async function getGoodsItem(goods_id: number) {
     let res = await buygoodsitemApi({ goods_id: goods_id })
+    if (!res.ok) return showFailToast(res.message)
     if (res.ok) {
         showSuccessToast('下单成功，联系卖家发货！')
         router.push({

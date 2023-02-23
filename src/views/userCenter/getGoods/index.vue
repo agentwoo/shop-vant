@@ -69,14 +69,15 @@ async function confirmOrder(goods_id: number) {
 onMounted(async () => {
     // 获取已发货商品订单列表
     let res = await gettradeordergoodsApi()
-    if (!res.ok) showFailToast('系统繁忙！')
+    if (!res.ok) return showFailToast(res.message)
     goodsItemStore.tradeordergoods = res.data
     // 获取待发货商品订单列表
     let resshipped = await getshippedordergoodsApi()
+    if (!resshipped.ok) return showFailToast(res.message)
     goodsItemStore.shippedordergoods = resshipped.data
     // 获取已完成商品订单
     let finishres = await getfinishordergoodsApi()
-    if (!finishres.ok) showFailToast('系统繁忙！')
+    if (!finishres.ok) return showFailToast(res.message)
     goodsItemStore.finishedOrderGoodsList = finishres.data
 })
 
@@ -95,11 +96,11 @@ const activeName = ref('a');
 // 删除已完成的订单商品
 async function finishedOrder(order_id: number) {
     let res = await delfinishedgoodsApi({ order_id: order_id })
-    if (!res.ok) showFailToast('系统繁忙！')
+    if (!res.ok) return showFailToast('系统繁忙！')
 
     // 删除本地数据
     let index = goodsItemStore.finishedOrderGoodsList.findIndex(v => v.order_id === order_id)
-    if (index === -1) showFailToast('系统繁忙！')
+    if (index === -1) return showFailToast('系统繁忙！')
     goodsItemStore.finishedOrderGoodsList.splice(index, 1)
     showSuccessToast('删除成功！')
 }
@@ -112,8 +113,7 @@ async function finishedOrder(order_id: number) {
         <van-tabs v-model:active="activeName" style="margin-top: 6vh;">
             <van-tab title="待发货" name="tradeordergoods">
                 <div v-if="goodsItemStore.tradeordergoods.length !== 0" class="container_order">
-                    <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id"
-                        class="container_order_card">
+                    <div v-for="item in goodsItemStore.tradeordergoods" :key="item.goods_id" class="container_order_card">
                         <div @click="topubcontact(item.goods_id)">
                             <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                                 :thumb=item.goods_title_img>
@@ -130,8 +130,7 @@ async function finishedOrder(order_id: number) {
             </van-tab>
             <van-tab title="已发货" name="shippedordergoods">
                 <div v-if="goodsItemStore.shippedordergoods.length !== 0" class="container_order">
-                    <div v-for="item in goodsItemStore.shippedordergoods" :key="item.goods_id"
-                        class="container_order_card">
+                    <div v-for="item in goodsItemStore.shippedordergoods" :key="item.goods_id" class="container_order_card">
                         <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                             :thumb=item.goods_title_img>
                             <template #footer>

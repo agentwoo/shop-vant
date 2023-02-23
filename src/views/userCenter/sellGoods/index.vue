@@ -17,21 +17,26 @@ const goodsItemStore = useGoodsItemStore()
 // navbar
 const router = useRouter()
 const onClickLeft = () => {
-    router.back()
+    router.push({
+        path: "/userCenter"
+    })
 }
 
 // 获取商品列表
 onMounted(async () => {
     // 待发货
     let restradegoods = await gettradegoodsApi()
+    if (!restradegoods.ok) return showFailToast(restradegoods.message)
     goodsItemStore.tradeGoodsList = restradegoods.data
 
     // 待买家确认收货
     let resshippedgoods = await getshippedgoodsApi()
+    if (!resshippedgoods.ok) return showFailToast(resshippedgoods.message)
     goodsItemStore.shippedGoodsList = resshippedgoods.data
 
     // 已完成交易
     let restradefinishedgoods = await gettradefinishedgoodsApi()
+    if (!restradefinishedgoods.ok) return showFailToast(restradefinishedgoods.message)
     goodsItemStore.tradefinishedGoodsList = restradefinishedgoods.data
 })
 
@@ -103,8 +108,8 @@ const activeName = ref('a');
                 <div v-if="goodsItemStore.shippedGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.shippedGoodsList" :key="item.goods_id"
                         class="container_card">
-                        <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc
-                            :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
+                        <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                            class="goods-card" :thumb=item.goods_title_img>
                             <template #footer>
                                 <van-button size="mini" v-if="item.goods_status === '3'">
                                     等待买家确认收货
@@ -119,12 +124,12 @@ const activeName = ref('a');
                 <div v-if="goodsItemStore.tradefinishedGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.tradefinishedGoodsList" :key="item.goods_id"
                         class="container_card">
-                        <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc
-                            :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
+                        <van-card tag="已完成" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                            class="goods-card" :thumb=item.goods_title_img>
                         </van-card>
                         <template #right>
-                            <van-button square text="删除" type="danger"
-                                @click.stop="deltradefinishedgoods(item.goods_id)" class="delete-button" />
+                            <van-button square text="删除" type="danger" @click.stop="deltradefinishedgoods(item.goods_id)"
+                                class="delete-button" />
                         </template>
                     </van-swipe-cell>
                 </div>

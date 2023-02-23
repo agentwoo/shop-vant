@@ -16,9 +16,11 @@ const onClickLeft = () => {
 // 获取已发布的商品列表
 onMounted(async () => {
     let res = await getpubgoodsApi()
+    if (!res.ok) return showFailToast(res.message)
     goodsItemStore.pubGoodsList = res.data
 
     let resremove = await getremovegoodsApi()
+    if (!res.ok) return showFailToast(res.message)
     goodsItemStore.removeGoodsList = resremove.data
 })
 

@@ -45,13 +45,13 @@ async function login() {
         localStorage.setItem('logintimestamp', JSON.stringify(nowtimestamp))
 
         router.push('/userCenter')
-        showSuccessToast('登录成功！')
+        showSuccessToast(res.message)
 
         data.login.username = ''
         data.login.password = ''
 
     } else {
-        showFailToast('账号或密码错误！')
+        showFailToast(res.message)
     }
 }
 
@@ -93,8 +93,8 @@ async function register() {
                         <van-cell-group inset>
                             <van-field v-model="data.login.username" name="用户名" label="用户名" placeholder="用户名" required
                                 :rules="[{ required: true, message: '请填写用户名' }]" />
-                            <van-field v-model="data.login.password" type="password" name="密码" label="密码"
-                                placeholder="密码" required :rules="[{ required: true, message: '请填写密码' }]" />
+                            <van-field v-model="data.login.password" type="password" name="密码" label="密码" placeholder="密码"
+                                required :rules="[{ required: true, message: '请填写密码' }]" />
                         </van-cell-group>
                         <div style="margin: 16px;">
                             <van-button round block type="primary" @click="login">
@@ -106,8 +106,8 @@ async function register() {
                 <van-tab title="注册" name="register">
                     <van-form class="form">
                         <van-cell-group inset>
-                            <van-field v-model="data.register.username" name="用户名" label="用户名" placeholder="用户名"
-                                required :rules="[{ required: true, message: '请填写用户名' }]" />
+                            <van-field v-model="data.register.username" name="用户名" label="用户名" placeholder="用户名" required
+                                :rules="[{ required: true, message: '请填写用户名' }]" />
                             <van-field v-model="data.register.password" type="password" name="密码" label="密码"
                                 placeholder="密码" required :rules="[{ required: true, message: '请填写密码' }]" />
                             <van-field v-model="data.register.checkpassword" type="password" name="确认密码" label="确认密码"
