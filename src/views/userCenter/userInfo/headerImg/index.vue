@@ -48,6 +48,20 @@ const deleteimg = () => {
     data.showbutton = false
 }
 
+// 限制图片的大小及后缀名
+const beforeRead = (file: any) => {
+    if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
+        if (file.size / 1024 / 1024 > 10) {
+            showFailToast('图片大小不能超过10mb');
+            return false
+        }
+    } else {
+        showFailToast('图片格式必须是jpg/jepg/png');
+        return false
+    }
+    return true
+};
+
 // 修改用户信息中的图片信息
 async function updateuserImg() {
     // 修改数据库图片
@@ -77,7 +91,7 @@ async function updateuserImg() {
             <div class="container_content_edit">
                 <div v-if="data.showpicture">
                     <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
-                        @delete="deleteimg">
+                        @delete="deleteimg" :before-read='beforeRead'>
                         <van-button round type="primary">
                             更换头像
                         </van-button>

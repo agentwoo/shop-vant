@@ -80,24 +80,23 @@ onMounted(async () => {
         &_views {
             position: absolute;
             top: 46px;
-            left: 80px;
+            left: 82px;
             overflow: hidden;
             overflow-y: scroll;
 
 
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 0 2vw;
+            padding: 0 1vw;
 
             :deep(.container) {
                 width: 33vw;
+                margin-right: 2vw;
             }
 
             :deep(.van-image__img) {
                 width: 78%;
                 border-radius: 20px;
-                // object-fit: contain;
             }
 
         }

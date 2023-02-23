@@ -205,7 +205,7 @@ onMounted(async () => {
                     <van-field name="uploader" label="详情图" required :rules="[{ validator: fileList }]">
                         <template #input>
                             <van-uploader v-model="data.fileList" multiple :max-count="4" :after-read="onUploadList"
-                                :before-delete="delCoverListImg" />
+                                :before-delete="delCoverListImg" :before-read='beforeRead' />
                         </template>
                     </van-field>
                 </van-cell-group>
