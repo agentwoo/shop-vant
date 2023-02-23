@@ -13,6 +13,11 @@ interface Iupdategoodsdesc {
     goods_origin_price: string,
     goods_present_price: string,
     goods_contact: string,
+    goods_title_img: string,
+    goods_swiper_img1: string,
+    goods_swiper_img2: string,
+    goods_swiper_img3: string,
+    goods_swiper_img4: string,
 }
 
 export const loginApi = (data: Idata): any => http({ url: '/api/my/login', method: 'post', data })
