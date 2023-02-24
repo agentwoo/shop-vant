@@ -18,8 +18,10 @@ const onClickLeft = () => {
 const userStore = useUserStore()
 const data = reactive({
     user_img: '',
+    uploadImg: false,
     // 图片
     fileTitle: [],
+    deletable: true,
 })
 
 // 提交图片
@@ -44,6 +46,7 @@ async function onUpload(upload_file: any) {
 // 删除封面图预览
 const delCoverListImg = () => {
     data.user_img = ''
+    data.uploadImg = true
     return true
 }
 
@@ -69,7 +72,8 @@ async function updateuserImg() {
     // 修改数据库图片
     let resupdate = await updateuserImgApi({ user_img: data.user_img, user_name: userStore.user.user_name })
     if (!resupdate.ok) showFailToast('系统繁忙！')
-
+    // 关闭删除按钮
+    data.deletable = false
     // 更改本地图片
     let user_info = JSON.parse(localStorage.getItem('userInfo') as string)
     user_info.user_img = data.user_img
@@ -87,8 +91,14 @@ async function updateuserImg() {
         <div class="container_content">
             <div class="container_content_img">
                 <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
-                    :before-read='beforeRead' :before-delete="delCoverListImg">
-                    <van-image width="20rem" height="20rem" fit="cover" position="center" :src="userStore.user.user_img" />
+                    :before-read='beforeRead' :before-delete="delCoverListImg" :deletable='data.deletable'>
+                    <div v-if="data.user_img === '' && data.uploadImg === false">
+                        <van-image width="20rem" height="20rem" fit="cover" position="center"
+                            :src="userStore.user.user_img" />
+                    </div>
+                    <div v-else>
+                        <van-image width="20rem" height="20rem" fit="cover" position="center" :src="data.user_img" />
+                    </div>
                 </van-uploader>
             </div>
             <div class="container_content_edit">

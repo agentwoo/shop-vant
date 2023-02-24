@@ -36,11 +36,16 @@ const data = reactive({
     },
     // 图片
     fileTitle: [],
+    deletable: true,
     // 详情图
     fileTitle1: [],
+    deletable1: true,
     fileTitle2: [],
+    deletable2: true,
     fileTitle3: [],
+    deletable3: true,
     fileTitle4: [],
+    deletable4: true,
 })
 
 
@@ -48,22 +53,37 @@ const data = reactive({
 // 表单提交
 async function onSubmit(values: any) {
     let goodsInfo = values
-    let res = await updategoodsdescApi({
-        goods_id: data.goods_desc.goods_id,
-        goods_title: goodsInfo.goods_title,
-        goods_desc: goodsInfo.goods_desc,
-        goods_origin_price: goodsInfo.origin_price,
-        goods_present_price: goodsInfo.present_price,
-        goods_contact: goodsInfo.contact,
-        goods_title_img: data.goods_desc.goods_title_img,
-        goods_swiper_img1: data.goods_desc.goods_swiper_img1,
-        goods_swiper_img2: data.goods_desc.goods_swiper_img2,
-        goods_swiper_img3: data.goods_desc.goods_swiper_img3,
-        goods_swiper_img4: data.goods_desc.goods_swiper_img4,
-    })
+    if (
+        data.goods_desc.goods_title_img !== ''
+        && data.goods_desc.goods_swiper_img1 !== ''
+        && data.goods_desc.goods_swiper_img2 !== ''
+        && data.goods_desc.goods_swiper_img3 !== ''
+        && data.goods_desc.goods_swiper_img4 !== ''
+    ) {
+        let res = await updategoodsdescApi({
+            goods_id: data.goods_desc.goods_id,
+            goods_title: goodsInfo.goods_title,
+            goods_desc: goodsInfo.goods_desc,
+            goods_origin_price: goodsInfo.origin_price,
+            goods_present_price: goodsInfo.present_price,
+            goods_contact: goodsInfo.contact,
+            goods_title_img: data.goods_desc.goods_title_img,
+            goods_swiper_img1: data.goods_desc.goods_swiper_img1,
+            goods_swiper_img2: data.goods_desc.goods_swiper_img2,
+            goods_swiper_img3: data.goods_desc.goods_swiper_img3,
+            goods_swiper_img4: data.goods_desc.goods_swiper_img4,
+        })
 
-    if (!res.ok) return showFailToast(res.message)
-    showSuccessToast('修改成功！')
+        if (!res.ok) return showFailToast(res.message)
+        showSuccessToast('修改成功！')
+        data.deletable = false
+        data.deletable1 = false
+        data.deletable2 = false
+        data.deletable3 = false
+        data.deletable4 = false
+    } else {
+        return showFailToast('图片不能为空')
+    }
 }
 
 
@@ -78,7 +98,6 @@ onMounted(async () => {
     data.fileTitle2 = res.data.goods_swiper_img2
     data.fileTitle3 = res.data.goods_swiper_img3
     data.fileTitle4 = res.data.goods_swiper_img4
-
 })
 
 // 获取商品的id
@@ -139,8 +158,9 @@ async function onUpload(upload_file: any) {
     }
 }
 // 删除封面图预览
-const delCoverImg = () => {
+const delCoverImg = (file: any, detail: any) => {
     data.goods_desc.goods_title_img = ''
+    data.fileTitle.splice(detail.index, 1)
     return true
 }
 
@@ -162,10 +182,12 @@ async function onUpload1(upload_file: any) {
     }
 }
 // 删除封面图预览
-const delCoverImg1 = () => {
+const delCoverImg1 = (file: any, detail: any) => {
     data.goods_desc.goods_swiper_img1 = ''
+    data.fileTitle1.splice(detail.index, 1)
     return true
 }
+
 async function onUpload2(upload_file: any) {
     upload_file.status = 'uploading'
     const formData = new FormData()
@@ -184,8 +206,9 @@ async function onUpload2(upload_file: any) {
     }
 }
 // 删除封面图预览
-const delCoverImg2 = () => {
+const delCoverImg2 = (file: any, detail: any) => {
     data.goods_desc.goods_swiper_img2 = ''
+    data.fileTitle2.splice(detail.index, 1)
     return true
 }
 async function onUpload3(upload_file: any) {
@@ -206,8 +229,9 @@ async function onUpload3(upload_file: any) {
     }
 }
 // 删除封面图预览
-const delCoverImg3 = () => {
+const delCoverImg3 = (file: any, detail: any) => {
     data.goods_desc.goods_swiper_img3 = ''
+    data.fileTitle3.splice(detail.index, 1)
     return true
 }
 async function onUpload4(upload_file: any) {
@@ -228,8 +252,9 @@ async function onUpload4(upload_file: any) {
     }
 }
 // 删除封面图预览
-const delCoverImg4 = () => {
+const delCoverImg4 = (file: any, detail: any) => {
     data.goods_desc.goods_swiper_img4 = ''
+    data.fileTitle4.splice(detail.index, 1)
     return true
 }
 </script>
@@ -254,7 +279,7 @@ const delCoverImg4 = () => {
                     <van-field name="uploader" label="封面图" required>
                         <template #input>
                             <van-uploader v-model="data.fileTitle" multiple :max-count="1" :after-read="onUpload"
-                                :before-read='beforeRead' :before-delete="delCoverImg">
+                                :before-read='beforeRead' :before-delete="delCoverImg" :deletable='data.deletable'>
                                 <van-image width="80" height="80" :src="data.goods_desc.goods_title_img" />
                             </van-uploader>
                         </template>
@@ -262,19 +287,19 @@ const delCoverImg4 = () => {
                     <van-field name="uploader1" label="详情图" required>
                         <template #input>
                             <van-uploader v-model="data.fileTitle1" multiple :max-count="1" :after-read="onUpload1"
-                                :before-read='beforeRead' :before-delete="delCoverImg1">
+                                :before-read='beforeRead' :before-delete="delCoverImg1" :deletable='data.deletable1'>
                                 <van-image width="80" height="80" :src="data.goods_desc.goods_swiper_img1" />
                             </van-uploader>
                             <van-uploader v-model="data.fileTitle2" multiple :max-count="1" :after-read="onUpload2"
-                                :before-read='beforeRead' :before-delete="delCoverImg2">
+                                :before-read='beforeRead' :before-delete="delCoverImg2" :deletable='data.deletable2'>
                                 <van-image width="80" height="80" :src="data.goods_desc.goods_swiper_img2" />
                             </van-uploader>
                             <van-uploader v-model="data.fileTitle3" multiple :max-count="1" :after-read="onUpload3"
-                                :before-read='beforeRead' :before-delete="delCoverImg3">
+                                :before-read='beforeRead' :before-delete="delCoverImg3" :deletable='data.deletable3'>
                                 <van-image width="80" height="80" :src="data.goods_desc.goods_swiper_img3" />
                             </van-uploader>
                             <van-uploader v-model="data.fileTitle4" multiple :max-count="1" :after-read="onUpload4"
-                                :before-read='beforeRead' :before-delete="delCoverImg4">
+                                :before-read='beforeRead' :before-delete="delCoverImg4" :deletable='data.deletable4'>
                                 <van-image width="80" height="80" :src="data.goods_desc.goods_swiper_img4" />
                             </van-uploader>
                         </template>
