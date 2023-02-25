@@ -1,18 +1,8 @@
-import { computed, reactive, toRefs } from "vue";
+import { reactive, toRefs } from "vue";
 import { defineStore } from 'pinia';
-import { IgoodsDesc, pubgood } from '@/utils/store'
+import { pubgood } from '@/utils/store'
 import { Igoods, Imenus, Iorder, Icollect } from '@/utils/store'
 
-const arr = {
-    replace: function <T>(list: T[], item: T, key: keyof T) {
-        let index = list.findIndex(v => v[key] === item[key])
-        if (index === -1) {
-            list.push(item)
-        } else {
-            list.splice(index, 1, item)
-        }
-    }
-}
 
 export const useGoodsItemStore = defineStore('goods', () => {
     const state = reactive({
@@ -36,39 +26,14 @@ export const useGoodsItemStore = defineStore('goods', () => {
         removeGoodsList: [] as pubgood[],//下架的商品
     })
 
-    // 查找事项
-    function searchItem(Val: string): 0 | 1 | Igoods[] {
-        let val = Val.trim()
-        if (!val) return 0
-        let arr = state.allGoodsList.filter((v) => v.goods_title.indexOf(val) !== -1)
-        if (arr.length === 0) return 1
-        return arr
-    }
 
     //商品详情分类
     function goodsKind(kind: string) {
         return state.allGoodsList.filter(v => v.goods_pid === kind)
     }
-
-
-    // 前后端交互
-    // 未删除和为完成的商品发布列表
-    const undelgoodsList$ = computed(() => {
-        return state.pubGoodsList.filter(v => v.is_delgoods === '0' && v.goods_status !== '4')
-    })
-    const sellgoodsList$ = computed(() => {
-        return state.pubGoodsList.filter(v => v.is_delgoods === '0' && v.goods_status === '4')
-    })
-
-
     return {
         ...toRefs(state),
-        searchItem,
         goodsKind,
-
-
-        undelgoodsList$,
-        sellgoodsList$
     }
 })
 

@@ -119,5 +119,9 @@ export const getpubgoodsApi = (): any => http({ url: '/api/getpubgoods', method:
 export const getremovegoodsApi = (): any => http({ url: '/api/getremovegoods', method: 'post' })
 // 修改发布商品的详情
 export const updategoodsdescApi = (data: Iupdategoodsdesc): any => http({ url: '/api/updategoodsdesc', method: 'post', data })
-// 删除我的发布
+// 下架我的发布
 export const delgoodsitemApi = (data: { goods_id: string }): any => http({ url: '/api/delgoodsitem', method: 'post', data })
+// 删除下架的商品
+export const removegoodsApi = (data: { goods_id: string }): any => http({ url: '/api/removegoods', method: 'post', data })
+// 重新上架商品
+export const readdpubgoodsApi = (data: { goods_id: string }): any => http({ url: '/api/readdpubgoods', method: 'post', data })

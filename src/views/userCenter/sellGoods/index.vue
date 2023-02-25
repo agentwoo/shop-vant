@@ -81,6 +81,15 @@ async function deltradefinishedgoods(goods_id: number) {
 
 const activeName = ref('a');
 
+
+// 商品详情
+const toGoodsDesc = (goodsId: number) => {
+    router.push({
+        name: 'goodsDesc',
+        params: { id: goodsId }
+    })
+}
+
 </script>
 
 <template>
@@ -91,15 +100,17 @@ const activeName = ref('a');
                 <div v-if="goodsItemStore.tradeGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.tradeGoodsList" :key="item.goods_id"
                         class="container_card">
-                        <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                            class="goods-card" :thumb=item.goods_title_img>
-                            <template #footer>
-                                <van-button size="mini" @click="sendoutgoodstip(item.goods_id)"
-                                    v-if="item.goods_status === '2'">
-                                    确认发货
-                                </van-button>
-                            </template>
-                        </van-card>
+                        <div @click="toGoodsDesc(item.goods_id)">
+                            <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
+                                class="goods-card" :thumb=item.goods_title_img>
+                                <template #footer>
+                                    <van-button size="mini" @click="sendoutgoodstip(item.goods_id)"
+                                        v-if="item.goods_status === '2'">
+                                        确认发货
+                                    </van-button>
+                                </template>
+                            </van-card>
+                        </div>
                     </van-swipe-cell>
                 </div>
                 <div v-else class="empty"><van-empty description="暂无交易物品" /></div>
