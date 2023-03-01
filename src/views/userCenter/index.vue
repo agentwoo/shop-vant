@@ -4,7 +4,7 @@ import { reactive, toRefs, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import imgUrl from '@/assets/pig.jpeg'
 import { useUserStore } from '@/store/index'
-import { showFailToast } from 'vant';
+import { showFailToast, showDialog } from 'vant';
 
 
 const userStore = useUserStore()
@@ -43,7 +43,13 @@ const toUserInfo = () => {
     })
 }
 
-
+async function tip() {
+    showDialog({
+        message: '反馈邮箱：123456@qq.com'
+    }).then(() => {
+        // on close
+    });
+}
 </script>
 
 <template>
@@ -62,8 +68,14 @@ const toUserInfo = () => {
             </div>
         </div>
         <van-cell-group inset style="margin-top:2vh">
-            <van-cell :title=item.title :icon=item.icon v-for="item in data" :key="item.path"
-                @click="toKind(item.path)">
+            <van-cell :title=item.title :icon=item.icon v-for="item in data" :key="item.path" @click="toKind(item.path)">
+                <template #right-icon>
+                    <van-icon name="arrow" />
+                </template>
+            </van-cell>
+        </van-cell-group>
+        <van-cell-group inset style="margin-top:2vh">
+            <van-cell title='反馈问题' icon=service-o @click="tip">
                 <template #right-icon>
                     <van-icon name="arrow" />
                 </template>

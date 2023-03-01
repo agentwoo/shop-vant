@@ -38,8 +38,8 @@ const toNavigate = (path: string) => {
 </script>
 
 <template>
-    <div class="container">
-        <RouterView></RouterView>
+    <RouterView></RouterView>
+    <div class="tabbar">
         <van-tabbar v-model="active">
             <van-tabbar-item :name=item.name :icon=item.icon v-for="item in data" :key="item.name"
                 @click="toNavigate(item.path)">
@@ -50,5 +50,9 @@ const toNavigate = (path: string) => {
 </template>
 
 <style lang='scss' scoped>
-
+.tabbar {
+    :deep(.van-tabbar--fixed) {
+        margin-bottom: -1px;
+    }
+}
 </style>

@@ -47,7 +47,7 @@ async function sendoutgoodstip(goods_id: number) {
     }).then(() => {
         sendoutgoods(goods_id)
     }).catch(() => {
-        showFailToast('取消操作！')
+
     });
 }
 
@@ -104,7 +104,7 @@ const toGoodsDesc = (goodsId: number) => {
                             <van-card :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
                                 class="goods-card" :thumb=item.goods_title_img>
                                 <template #footer>
-                                    <van-button size="mini" @click="sendoutgoodstip(item.goods_id)"
+                                    <van-button size="mini" @click.stop="sendoutgoodstip(item.goods_id)"
                                         v-if="item.goods_status === '2'">
                                         确认发货
                                     </van-button>
@@ -119,14 +119,16 @@ const toGoodsDesc = (goodsId: number) => {
                 <div v-if="goodsItemStore.shippedGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.shippedGoodsList" :key="item.goods_id"
                         class="container_card">
-                        <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc :title=item.goods_title
-                            class="goods-card" :thumb=item.goods_title_img>
-                            <template #footer>
-                                <van-button size="mini" v-if="item.goods_status === '3'">
-                                    等待买家确认收货
-                                </van-button>
-                            </template>
-                        </van-card>
+                        <div @click="toGoodsDesc(item.goods_id)">
+                            <van-card tag="待收货" :price=item.goods_present_price :desc=item.goods_desc
+                                :title=item.goods_title class="goods-card" :thumb=item.goods_title_img>
+                                <template #footer>
+                                    <van-button size="mini" v-if="item.goods_status === '3'">
+                                        等待买家确认收货
+                                    </van-button>
+                                </template>
+                            </van-card>
+                        </div>
                     </van-swipe-cell>
                 </div>
                 <div v-else class="empty"><van-empty description="暂无交易物品" /></div>

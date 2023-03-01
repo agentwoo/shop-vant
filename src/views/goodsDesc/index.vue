@@ -68,7 +68,7 @@ const confirmbuygoods = (goods_id: number) => {
     showConfirmDialog({
         title: '提示',
         message:
-            '预约购买成功后，您将获得卖家的联系方式，请及时与卖家取得联系，进行线下当面付款交易。注意:该产品在您预约购买后，会自动下架，您是该产品的唯一买家。',
+            '购买成功后，您将获得卖家的联系方式，请及时与卖家取得联系，进行线下当面付款交易。',
     }).then(() => {
         getGoodsItem(goods_id)
     }).catch(() => {

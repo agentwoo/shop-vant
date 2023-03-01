@@ -123,7 +123,7 @@ async function readdpubgoods(goods_id: string) {
     <div class="container">
         <van-nav-bar title="发布" left-text="返回" left-arrow @click-left="onClickLeft" fixed />
         <van-tabs v-model:active="activeName" style="margin-top: 6vh;">
-            <van-tab title="已发布" name="pub">
+            <van-tab title="展示中" name="pub">
                 <!-- 获取发布中的商品 -->
                 <div v-if="goodsItemStore.pubGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.pubGoodsList" :key="item.goods_id" class="container_card">
@@ -143,14 +143,15 @@ async function readdpubgoods(goods_id: string) {
                     <van-empty description=" 暂无发布商品" />
                 </div>
             </van-tab>
-            <van-tab title="已下架" name="remove">
+            <van-tab title="未售出" name="remove">
                 <!-- 获取已下架的商品 -->
                 <div v-if="goodsItemStore.removeGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.removeGoodsList" :key="item.goods_id"
                         class="container_card">
                         <div @click="toupdategoodsdesc(item.goods_id)">
-                            <van-card tag="已下架" :price=item.goods_origin_price :desc=item.goods_desc :title=item.goods_title
-                                class="goods-card" :thumb=item.goods_title_img>
+                            <van-card :tag="item.goods_status == '0' ? '已下架' : '审核未通过'" :price=item.goods_origin_price
+                                :desc=item.goods_desc :title=item.goods_title class="goods-card"
+                                :thumb=item.goods_title_img>
                                 <template #footer>
                                     <van-button size="mini" @click.stop="removetip(item.goods_id)">
                                         删除商品
