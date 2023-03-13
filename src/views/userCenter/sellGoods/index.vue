@@ -133,7 +133,7 @@ const toGoodsDesc = (goodsId: number) => {
                 </div>
                 <div v-else class="empty"><van-empty description="暂无交易物品" /></div>
             </van-tab>
-            <van-tab title="交易完成" name="tradefinishedGoodsList">
+            <van-tab title="交易历史" name="tradefinishedGoodsList">
                 <div v-if="goodsItemStore.tradefinishedGoodsList.length !== 0">
                     <van-swipe-cell v-for="item in goodsItemStore.tradefinishedGoodsList" :key="item.goods_id"
                         class="container_card">

@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
     <div class="container">
         <van-nav-bar title="热门商品" fixed left-text="返回" left-arrow @click-left="onClickLeft" />
-        <div v-if="goodsItemStore.hotGoodsList.length === 0" class="container_empty">
+        <div v-if="!goodsItemStore.hotGoodsList" class="container_empty">
             <van-empty description="暂无商品" />
         </div>
         <div v-else class="container_content">

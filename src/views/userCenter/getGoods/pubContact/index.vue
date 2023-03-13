@@ -76,7 +76,7 @@ const onClickLeft = () => {
             <div class="van-multi-ellipsis--l3">
                 商品详情： {{ data.item.goods_desc }}
             </div>
-            <div class="van-multi-ellipsis--l3">
+            <div class="van-multi-ellipsis--l4">
                 联系方式：{{ data.item.goods_contact }}
             </div>
         </div>
@@ -111,6 +111,7 @@ const onClickLeft = () => {
             display: flex;
             justify-content: end;
             margin-right: 20px;
+            color: rgb(198, 196, 196);
         }
     }
 
@@ -118,13 +119,23 @@ const onClickLeft = () => {
         height: 6vh;
         width: 100%;
         background-color: white;
-        font-size: 15px;
+        font-size: 17px;
+        font-weight: 700;
     }
 
     .van-multi-ellipsis--l3 {
         height: 70px;
         width: 100%;
         font-size: 15px;
+        background-color: white;
+        border-top: 1px solid rgb(202, 196, 196);
+    }
+
+    .van-multi-ellipsis--l4 {
+        height: 70px;
+        width: 100%;
+        font-size: 18px;
+        font-weight: 700;
         background-color: white;
         border-top: 1px solid rgb(202, 196, 196);
     }

@@ -86,9 +86,13 @@ const delCoverListImg = (file: any, detail: any) => {
     data.pub_goods.cover_list.splice(detail.index, 1)
     return true
 }
-
+let formRef = ref()
 // 表单提交
 async function onSubmit(values: any) {
+    const $form = formRef.value
+    if (!$form) return
+    const valid = await $form.validate()
+
     let goodsInfo = values
     let res = await pubgoodsAPi({
         goods_title: goodsInfo.goods_title.trim(),
@@ -108,7 +112,6 @@ async function onSubmit(values: any) {
     if (!res.ok) return showFailToast(res.message)
     router.push({ path: '/userCenter/pubGoods' })
     showSuccessToast('发布成功！')
-
 
     data.pub_goods.goods_title = '';
     data.pub_goods.goods_desc = '';
@@ -178,9 +181,9 @@ onMounted(async () => {
             <van-form @submit="onSubmit" ref="formRef">
                 <van-cell-group inset>
                     <van-field v-model="data.pub_goods.goods_title" name="goods_title" placeholder="标题" label="标题"
-                        :maxlength="10" :rules="[{ required: true, message: '请填写标题' }]" required />
+                        :maxlength="30" :rules="[{ required: true, message: '请填写标题' }]" required />
                     <van-field v-model="data.pub_goods.goods_desc" name="goods_desc" placeholder="详情" label="详情"
-                        :maxlength="20" :rules="[{ required: true, message: '请填写详情' }]" required />
+                        :maxlength="60" :rules="[{ required: true, message: '请填写详情' }]" required />
                     <van-field v-model="data.pub_goods.origin_price" name="origin_price" type="number" placeholder="原价"
                         label="原价" :maxlength="5" :rules="[{ required: true, message: '请填写原价' }]" required />
                     <van-field v-model="data.pub_goods.present_price" name="present_price" type="number" placeholder="现价"
@@ -211,7 +214,7 @@ onMounted(async () => {
                 </van-cell-group>
                 <div style="margin: 16px;">
                     <van-button round block type="primary" native-type="submit">
-                        提交
+                        发布
                     </van-button>
                 </div>
             </van-form>

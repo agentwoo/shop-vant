@@ -6,6 +6,7 @@ import { showSuccessToast, showFailToast } from 'vant';
 
 import { useUserStore } from '@/store/index';
 import { loginApi, registerApi } from '@/http';
+import 'vant/es/toast/style';
 
 // navbar
 const router = useRouter()
@@ -31,7 +32,12 @@ const data = reactive({
 let nowtimestamp = new Date().getTime()
 
 //登录
+let logformRef = ref()
 async function login() {
+    const $form = logformRef.value
+    if (!$form) return
+    const valid = await $form.validate()
+
     let res = await loginApi({
         username: data.login.username.trim(),
         password: data.login.password.trim()
@@ -51,7 +57,28 @@ async function login() {
         data.login.password = ''
 
     } else {
-        showFailToast(res.message)
+        showFailToast('账号或密码错误，请重试')
+    }
+}
+
+// 用户名
+const username = (val: any) => {
+    if (!val.trim()) {
+        return '请输入用户名'
+    } else if (val.trim().length < 1 || val.trim().length > 10) {
+        return '用户名长度不超过10个字'
+    } else {
+        return true
+    }
+}
+// 密码
+const password = (val: any) => {
+    if (!val.trim()) {
+        return '请输入密码'
+    } else if (val.trim().length < 6 || val.trim().length > 12) {
+        return '密码应在6-12个字'
+    } else {
+        return true
     }
 }
 
@@ -65,7 +92,13 @@ const checkpassword = (val: any) => {
         return true
     }
 }
+let regformRef = ref()
+// 注册
 async function register() {
+    const $form = regformRef.value
+    if (!$form) return
+    const valid = await $form.validate()
+
     let res = await registerApi({
         username: data.register.username.trim(),
         password: data.register.password.trim()
@@ -89,7 +122,7 @@ async function register() {
         <div class="container_nav">
             <van-tabs v-model:active="activeName">
                 <van-tab title="登录" name="login">
-                    <van-form class="form">
+                    <van-form class="form" ref="logformRef">
                         <van-cell-group inset>
                             <van-field v-model="data.login.username" name="用户名" label="用户名" placeholder="用户名" required
                                 :rules="[{ required: true, message: '请填写用户名' }]" />
@@ -104,12 +137,12 @@ async function register() {
                     </van-form>
                 </van-tab>
                 <van-tab title="注册" name="register">
-                    <van-form class="form">
+                    <van-form class="form" ref="regformRef">
                         <van-cell-group inset>
                             <van-field v-model="data.register.username" name="用户名" label="用户名" placeholder="用户名" required
-                                :rules="[{ required: true, message: '请填写用户名' }]" />
+                                :rules="[{ validator: username }]" />
                             <van-field v-model="data.register.password" type="password" name="密码" label="密码"
-                                placeholder="密码" required :rules="[{ required: true, message: '请填写密码' }]" />
+                                placeholder="密码" required :rules="[{ validator: password }]" />
                             <van-field v-model="data.register.checkpassword" type="password" name="确认密码" label="确认密码"
                                 placeholder="密码" required :rules="[{ validator: checkpassword }]" />
                         </van-cell-group>

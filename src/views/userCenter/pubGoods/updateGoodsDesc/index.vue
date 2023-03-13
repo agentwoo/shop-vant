@@ -261,7 +261,7 @@ const delCoverImg4 = (file: any, detail: any) => {
 
 <template>
     <div class="container">
-        <van-nav-bar title="商品详情" left-text="返回" left-arrow @click-left="onClickLeft" fixed />
+        <van-nav-bar title="修改详情" left-text="返回" left-arrow @click-left="onClickLeft" fixed />
         <div class="container_form">
             <van-form @submit="onSubmit" ref="formRef">
                 <van-cell-group inset>

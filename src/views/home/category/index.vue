@@ -5,7 +5,7 @@ import router from '@/router';
 
 const data = [
     {
-        title: '所有商品', path: '/home/allShop', icon: 'cart-o',
+        title: '商品分类', path: '/home/allShop', icon: 'cart-o',
     },
     {
         title: '最新商品', path: '/home/newShop', icon: 'bulb-o',
@@ -33,6 +33,4 @@ const toCategory = (path: string) => {
     </div>
 </template>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang='scss' scoped></style>

@@ -61,7 +61,7 @@ onMounted(async () => {
 
     &_menus {
         &_list {
-            position: absolute;
+            position: fixed;
             top: 46px;
             left: 0;
             bottom: 0;

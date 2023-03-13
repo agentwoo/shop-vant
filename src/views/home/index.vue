@@ -6,15 +6,16 @@ import router from '@/router';
 import Category from '@/views/home/category/index.vue'
 import GoodsItem from '@/components/goodsItem/index.vue'
 import { useGoodsItemStore } from '@/store/index'
-import { getallgoodsListApi, getswiperApi } from '@/http/index'
+import { getallgoodsrandListApi, getswiperApi } from '@/http/index'
 
 
-import { Iswiper } from '@/utils/store'
+import { Igoods, Iswiper } from '@/utils/store'
 
 const goodsItemStore = useGoodsItemStore()
 const data = reactive({
     searchVal: '',
     swiper: [] as Iswiper[],
+    goodsrandList: [] as Igoods[],
 })
 
 // 获取当前时间戳
@@ -31,8 +32,8 @@ onMounted(async () => {
 
 
     // 获取所有商品数据
-    let resgoods = await getallgoodsListApi()
-    goodsItemStore.allGoodsList = resgoods.data
+    let resgoods = await getallgoodsrandListApi()
+    data.goodsrandList = resgoods.data
 
     // 如果token过期，则删除本地存储的用户数据
     if (logintimestamp) {
@@ -73,7 +74,7 @@ async function search(searchVal: string) {
         <div class="container_recommend">推荐商品</div>
         <Category></Category>
         <div class="container_layout">
-            <GoodsItem :goodsItemDesc="goodsItemStore.allGoodsList"></GoodsItem>
+            <GoodsItem :goodsItemDesc="data.goodsrandList"></GoodsItem>
         </div>
         <van-divider>没有更多了</van-divider>
     </div>

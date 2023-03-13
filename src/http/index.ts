@@ -42,6 +42,8 @@ export const getswiperApi = (): any => http({ url: '/api/my/getswiper', method: 
 
 // 获取全部商品
 export const getallgoodsListApi = () => http({ url: '/api/my/getallgoodsList', method: 'get' })
+// 获取全部商品-随机
+export const getallgoodsrandListApi = () => http({ url: '/api/my/getallgoodsrandList', method: 'get' })
 // 获取最新商品
 export const getnewgoodsListApi = () => http({ url: '/api/my/getnewgoodsList', method: 'get' })
 // 获取热门商品
