@@ -81,8 +81,7 @@ const password = (val: any) => {
         return true
     }
 }
-
-// 注册
+// 二次检验密码
 const checkpassword = (val: any) => {
     if (!val.trim()) {
         return '请确认密码'
@@ -118,7 +117,7 @@ async function register() {
 
 <template>
     <div class="container">
-        <van-nav-bar title="用户中心" left-text="返回" left-arrow @click-left="onClickLeft" />
+        <van-nav-bar title="登录/注册" left-text="返回" left-arrow @click-left="onClickLeft" />
         <div class="container_nav">
             <van-tabs v-model:active="activeName">
                 <van-tab title="登录" name="login">

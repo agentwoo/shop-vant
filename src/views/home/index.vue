@@ -1,6 +1,6 @@
 <!-- 首页 -->
 <script lang='ts' setup>
-import { reactive, toRefs, ref, onMounted } from 'vue'
+import { reactive, toRefs, ref, onMounted, watch } from 'vue'
 
 import router from '@/router';
 import Category from '@/views/home/category/index.vue'
@@ -10,6 +10,8 @@ import { getallgoodsrandListApi, getswiperApi } from '@/http/index'
 
 
 import { Igoods, Iswiper } from '@/utils/store'
+import { useRoute } from 'vue-router';
+import { showToast } from 'vant';
 
 const goodsItemStore = useGoodsItemStore()
 const data = reactive({
@@ -27,7 +29,7 @@ let timeout = 1000 * 60 * 60 * 24
 onMounted(async () => {
     // 获取轮播图
     let res = await getswiperApi()
-    if (!res.ok) return res.cc(res.message)
+    if (!res.ok) return showToast(res.message)
     data.swiper = res.data
 
 
@@ -61,9 +63,11 @@ async function search(searchVal: string) {
 <template>
     <div class="container">
         <van-nav-bar title='首页' fixed />
+        <!-- 搜索框 -->
         <div class="container_search">
             <van-search v-model="data.searchVal" clearable placeholder="请输入搜索关键词" @search="search(data.searchVal)" />
         </div>
+        <!-- 轮播图 -->
         <div class="container_swiper">
             <van-swipe :autoplay="3000" lazy-render style="height:200px">
                 <van-swipe-item v-for="item in data.swiper" :key="item.swiper_id">
