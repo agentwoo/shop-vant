@@ -74,13 +74,13 @@ async function tip() {
                 </template>
             </van-cell>
         </van-cell-group>
-        <van-cell-group inset style="margin-top:2vh">
-            <van-cell title='反馈问题' icon=service-o @click="tip">
-                <template #right-icon>
-                    <van-icon name="arrow" />
-                </template>
-            </van-cell>
-        </van-cell-group>
+        <!-- <van-cell-group inset style="margin-top:2vh">
+                <van-cell title='反馈问题' icon=service-o @click="tip">
+                    <template #right-icon>
+                        <van-icon name="arrow" />
+                    </template>
+                </van-cell>
+            </van-cell-group> -->
     </div>
 </template>
 

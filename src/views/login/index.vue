@@ -57,7 +57,7 @@ async function login() {
         data.login.password = ''
 
     } else {
-        showFailToast('账号或密码错误，请重试')
+        showFailToast(res.message)
     }
 }
 
